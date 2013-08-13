@@ -113,10 +113,11 @@
 			        font-size: 16px;
 			        line-height: 20px;
 			}
-
-
-
-
+			.bibliography {
+				font-family: sans-serif;
+				font-size: 12px;
+				text-rendering: optimizeLegibility;
+			}
 	</style>
 	
 </head>
@@ -127,7 +128,11 @@
 		<div id="graph"></div> 
 		<p id="blurb">Each fluorescent protein begins plotted with excitation wavelength on the x-axis and emission wavelength on the y-axis. The color is set 
 		based on its emission wavelength, and fades to gray as the brightness (product of exctinction coefficient and quantum yield) decreases. 
-		Mouseover each circle to see info on that protein. You can zoom using the mouse scroll wheel and pan by clicking and dragging. Use the filter sliders at the top right to select a subset of fluorescent proteins based on certain criteria.  Use the X and Y axis toggle boxes to change what is plotted on each axis.</p>
+		Mouseover each circle to see info on that protein. You can zoom using the mouse scroll wheel and pan by clicking and dragging. 
+		Use the filter sliders at the top right to select a subset of fluorescent proteins based on certain criteria.  Use the X and Y axis toggle 
+		boxes to change what is plotted on each axis.</p>
+		<h4 align="middle">Bibliography</h4>
+		<div id="bibliography" class="bibliography"></div>
 		<div id="tooltip" class="hidden">
 		        <h3>FPname</h3>
 		        <p>Ex: <span id="exvalue"></span>nm</p>
@@ -191,7 +196,6 @@
 	</div>
 	
 </body>
-
 
 <script>
 
@@ -284,6 +288,8 @@
 		$("#doalittledance").click(function(){doalittledance(1600);});
   	});
 
+	//load the bibliography
+	$("#bibliography").load('bibliography.html');
 
 	// Chart dimensions.
 	var margin = {top: 20, right: 30, bottom: 20, left: 50},
@@ -383,7 +389,7 @@
 	var FPdata = []; //Where the fluorescent protein data table will end up.
 
 	// load the csv file and plot it
-	d3.csv("testFPs2.csv", function (data) {
+	d3.csv("processedFPs.csv", function (data) {
 		data.forEach(function(d){
 			d.lambda_em = +d.lambda_em;		// typing these variables here for simplicity of code later on
 			d.lambda_ex = +d.lambda_ex;
@@ -414,8 +420,7 @@
 		svg.selectAll("circle.FP")
 			.attr("cx", function (d) { return xScale (d[currentX]); })
 			.attr("cy", function (d) { return yScale (d[currentY]); })
-	}
-	
+	}	
 
 	//i added this more flexible plotting function to be able to plot different variables on each axis.  It takes three optional parameters: the data array, and two axes variables.  
 	function plot(xvar,yvar,data){
