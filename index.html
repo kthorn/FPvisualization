@@ -12,7 +12,8 @@
 	<style>
 			
 			body {
-				font-family: sans-serif;
+				font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   				font-weight: 300;
 				width: 1100px;
 				margin: auto;
 				padding-top:20px;
@@ -20,14 +21,12 @@
 			.label
 			{
 				stroke-width:0.2;
-				font-family: sans-serif;
 				font-size: 12px;
 				text-redering: optimizeLegibility;
 			}
 			.axis text
 			{
 				stroke-width:0.2;
-				font-family: sans-serif;
 				font-size: 10px;
 				text-redering: optimizeLegibility;
 			}
@@ -86,53 +85,48 @@
 			        width: 150px;
 			        height: auto;
 			        padding: 10px;
-			        background-color: ivory;
+			        background-color: #fff;
+			        border: 1px solid #ddd;
 			        -webkit-border-radius: 10px;
 			        -moz-border-radius: 10px;
 			        border-radius: 10px;
-			        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-			        -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-			        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+			        -webkit-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+			        -moz-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+			        box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
 			        pointer-events: none;
+			        color: #333;
+
 			}
 
-			#tooltip.hidden {
+			.hidden {
 			        display: none;
-
 			}
 
 			#tooltip h3{
 			        margin: 0 0 5px 0;
-			        font-family: sans-serif;
 			        line-height: 20px;
+
 			}
 
 			#tooltip p {
 			        margin: 0;
-			        font-family: sans-serif;
 			        font-size: 16px;
 			        line-height: 20px;
 			}
-			.bibliography {
-				font-family: sans-serif;
-				font-size: 12px;
-				text-rendering: optimizeLegibility;
-			}
+
+			circle { cursor: pointer; }
+
+
+
 	</style>
 	
 </head>
 <body>
 	<h1 align="middle">Fluorescent protein properties<span id="doalittledance">&nbsp;&nbsp;&nbsp;</span></h1>
+	<div class="cf">
 	<div class="left">
 		
 		<div id="graph"></div> 
-		<p id="blurb">Each fluorescent protein begins plotted with excitation wavelength on the x-axis and emission wavelength on the y-axis. The color is set 
-		based on its emission wavelength, and fades to gray as the brightness (product of exctinction coefficient and quantum yield) decreases. 
-		Mouseover each circle to see info on that protein. You can zoom using the mouse scroll wheel and pan by clicking and dragging. 
-		Use the filter sliders at the top right to select a subset of fluorescent proteins based on certain criteria.  Use the X and Y axis toggle 
-		boxes to change what is plotted on each axis.</p>
-		<h4 align="middle">Bibliography</h4>
-		<div id="bibliography" class="bibliography"></div>
 		<div id="tooltip" class="hidden">
 		        <h3>FPname</h3>
 		        <p>Ex: <span id="exvalue"></span>nm</p>
@@ -146,10 +140,16 @@
 	<div class="right">
 	
 		<p>
-		  <label for="BrightAmount">Brightness range:</label>
-		  <input type="text" id="BrightAmount" style="border: 0; color: #f6931f; font-weight: bold;" />
+		  <label for="exRange">Excitation &lambda; range:</label>
+		  <input type="text" id="exRange" style="border: 0; color: #f6931f; font-weight: bold;" />
 		</p>
-		<div id="Brightslider-range"></div>
+		<div id="exSlider-range"></div>
+		
+		<p>
+		  <label for="emRange">Emission &lambda; range:</label>
+		  <input type="text" id="emRange" style="border: 0; color: #f6931f; font-weight: bold;" />
+		</p>
+		<div id="emSlider-range"></div>
 
 		<p>
 		  <label for="ECamount">EC range:</label>
@@ -162,6 +162,12 @@
 		  <input type="text" id="QYamount" style="border: 0; color: #f6931f; font-weight: bold;" />
 		</p>
 		<div id="QYslider-range"></div>
+
+		<p>
+		  <label for="BrightAmount">Brightness range:</label>
+		  <input type="text" id="BrightAmount" style="border: 0; color: #f6931f; font-weight: bold;" />
+		</p>
+		<div id="Brightslider-range"></div>
 
 		<div class="cf">
 			<div class="radioboxes">
@@ -194,8 +200,13 @@
 		</div>
 
 	</div>
+	</div>
+	<p id="blurb">Each fluorescent protein begins plotted with excitation wavelength on the x-axis and emission wavelength on the y-axis. The color is set 
+		based on its emission wavelength, and fades to gray as the brightness (product of exctinction coefficient and quantum yield) decreases. 
+		Mouseover each circle to see info on that protein or click on any datapoint to see the corresponding reference on PubMed.  You can zoom using the mouse scroll wheel and pan by clicking and dragging. Use the filter sliders at the top right to select a subset of fluorescent proteins based on certain criteria.  Use the X and Y axis toggle boxes to change what is plotted on each axis.</p>
 	
 </body>
+
 
 <script>
 
@@ -203,6 +214,8 @@
 	var currentX = "lambda_ex" 
 	var currentY = "lambda_em"
 	//global variables to set the range over which the data is filtered
+	var exRange = [350,620];
+	var emRange = [410,680];
 	var ecRange = [10000,140000];
 	var qyRange = [0,1];
 	var brightRange = [0,100]; 
@@ -222,7 +235,42 @@
 	//on page load, listen to slider events and respond by updating the filter ranges (and updating the ui)
 	//this uses jQuery and jQuery UI which have been added to the head of the document.
 	$(function() {
-		$( "#ECslider-range" ).slider({
+		
+		$( "#exSlider-range" ).slider({
+	      range: true,
+	      min: 350,
+	      max: 620,
+	      step: 1,
+	      values: [ 350, 620 ],
+	      slide: function( event, ui ) {
+	        $( "#exRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+	        exRange = ui.values;
+	        plot();
+	      }
+	    });
+
+	    $( "#exRange" ).val( $( "#exSlider-range" ).slider( "values", 0 ) + " - " +
+	       $( "#exSlider-range" ).slider( "values", 1 ) + " nm");
+	    
+
+	    $( "#emSlider-range" ).slider({
+	      range: true,
+	      min: 410,
+	      max: 680,
+	      step: 1,
+	      values: [ 410, 680 ],
+	      slide: function( event, ui ) {
+	        $( "#emRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+	        emRange = ui.values;
+	        plot();
+	      }
+	    });
+
+	    $( "#emRange" ).val( $( "#emSlider-range" ).slider( "values", 0 ) + " - " +
+	       $( "#emSlider-range" ).slider( "values", 1 ) + " nm");
+
+
+	    $( "#ECslider-range" ).slider({
 	      range: true,
 	      min: 10000,
 	      max: 140000,
@@ -288,8 +336,6 @@
 		$("#doalittledance").click(function(){doalittledance(1600);});
   	});
 
-	//load the bibliography
-	$("#bibliography").load('bibliography.html');
 
 	// Chart dimensions.
 	var margin = {top: 20, right: 30, bottom: 20, left: 50},
@@ -389,7 +435,7 @@
 	var FPdata = []; //Where the fluorescent protein data table will end up.
 
 	// load the csv file and plot it
-	d3.csv("processedFPs.csv", function (data) {
+	d3.csv("FPs.csv", function (data) {
 		data.forEach(function(d){
 			d.lambda_em = +d.lambda_em;		// typing these variables here for simplicity of code later on
 			d.lambda_ex = +d.lambda_ex;
@@ -420,7 +466,8 @@
 		svg.selectAll("circle.FP")
 			.attr("cx", function (d) { return xScale (d[currentX]); })
 			.attr("cy", function (d) { return yScale (d[currentY]); })
-	}	
+	}
+	
 
 	//i added this more flexible plotting function to be able to plot different variables on each axis.  It takes three optional parameters: the data array, and two axes variables.  
 	function plot(xvar,yvar,data){
@@ -431,8 +478,11 @@
 
 		//filter the data according to the user settings for EC, QY, and brightness range
 		data = data.filter(function(d) {
-		    return d.QY > qyRange[0] && d.QY < qyRange[1] && d.E > ecRange[0] && d.E < ecRange[1] && d.brightness > brightRange[0] && d.brightness < brightRange[1] &&
-		    		d.pka > 0;
+		    return d.QY > qyRange[0] && d.QY < qyRange[1] 
+		    	&& d.E > ecRange[0] && d.E < ecRange[1] 
+		    	&& d.brightness > brightRange[0] && d.brightness < brightRange[1] 
+		    	&& d.lambda_ex > exRange[0] && d.lambda_ex < exRange[1]
+		    	&& d.lambda_em > emRange[0] && d.lambda_em < emRange[1];
 		});
 
 		//filter out data with empty values
@@ -469,7 +519,12 @@
 			.attr("stroke", "#000")
 			.attr("opacity", 0.7)
 			.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)})
+			.on('click', function(e){
+        		if(e.DOI){window.location = "http://www.ncbi.nlm.nih.gov/pubmed/?term=" + e.DOI;}
+    		})
 			.on("mouseover", function(d) {
+				d3.select(this).transition().duration(100).attr("r",11)
+				d3.select(this).text("<a href='#'>hi</a>")
 				//Get this bar's x/y values, then augment for the tooltip
 				var xPosition = parseFloat(d3.select(this).attr("cx"))
 				var yPosition = parseFloat(d3.select(this).attr("cy"))
@@ -508,6 +563,7 @@
 
 			})
 			.on("mouseout", function() {
+				d3.select(this).transition().duration(200).attr("r",8)
 				//Hide the tooltip
 				d3.select("#tooltip").classed("hidden", true);
 				
