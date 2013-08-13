@@ -93,7 +93,7 @@ bibFileOut = 'bibliography.html'
 DOIindex = dict() #here is where we store the mapping of DOI the order of appearance
 maxRefNum = 1;
 
-with open(csvFileIn, 'rb') as csvIn:
+with open(csvFileIn, 'rU') as csvIn:
     FPreader = csv.DictReader(csvIn)
     with open(csvFileOut, 'wb') as csvOut:
         outHeaders = FPreader.fieldnames
@@ -120,13 +120,15 @@ for key, val in DOIindex.items():
         indexDOI[val] = key
 
 with open(bibFileOut, 'wb') as htmlOut:
+    htmlOut.write("<ol>")
     for k in sorted(indexDOI.keys()):
         print("Processing DOI " + str(k))
         bib = getBibFromDOI(indexDOI[k])
         if bib:
             bibstring = formatBibliography(bib)
-            outstring = "<p>" + str(k) +". " + bibstring +"</p>\r\n"
+            outstring = "<li>" + bibstring +"</li>\r\n"
             #deal with unicode characters
             outstring = outstring.encode('ascii', 'xmlcharrefreplace')
             htmlOut.write(outstring)
+    htmlOut.write("</ol>")
 

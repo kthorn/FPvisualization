@@ -1,0 +1,111 @@
+body {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	font-weight: 300;
+	width: 1100px;
+	margin: auto;
+	padding-top:20px;
+}
+.label
+{
+	stroke-width:0.2;
+	font-size: 12px;
+	text-redering: optimizeLegibility;
+}
+.axis text
+{
+	stroke-width:0.2;
+	font-size: 10px;
+	text-redering: optimizeLegibility;
+}
+.axis path,
+.axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+.tick
+{
+	stroke: black;
+}
+.pane
+{
+	fill: none;
+	pointer-events: all;
+}
+.left {
+	position: relative;
+	float: left;
+	width: 750px;
+}
+.right {
+	position: relative;
+	float: right;
+	width: 310px;
+}
+
+#blurb {
+	margin-top: 30px;
+	font-size: .95em;
+	font-style: italic;
+}
+.radioboxes {
+	width:150px;
+	font-size: .95em;
+	float:left;
+	text-align:center;
+}
+
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+#tooltip {
+        position: absolute;
+        width: 150px;
+        height: auto;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+        color: #333;
+}
+.hidden {
+        display: none;
+}
+
+#tooltip h3{
+        margin: 0 0 5px 0;
+        line-height: 20px;
+
+}
+
+#tooltip p {
+        margin: 0;
+        font-size: 16px;
+        line-height: 20px;
+}
+
+.bibliography {
+		font-family: sans-serif;
+		font-size: 12px;
+		text-rendering: optimizeLegibility;
+}
+.bibliography li{
+		padding-bottom: 6px;
+}
+
+circle { 
+	cursor: pointer; 
+}
