@@ -24,7 +24,7 @@ var strings = {
 var tableStrings = {
 	"Name"		: "Protein",
 	"lambda_ex" : "&lambda;<sub>ex</sub> (nm)",
-	"lambda_ex" : "&lambda;<sub>em</sub> (nm)",
+	"lambda_em" : "&lambda;<sub>em</sub> (nm)",
 	"E"			: "EC",
 	"QY"		: "QY",
 	"brightness": "Brightness",
