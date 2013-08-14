@@ -11,6 +11,7 @@ var brightRange = [0,100];
 var strings = {
 	"lambda_em" : "Emission Wavelength (nm)",
 	"lambda_ex" : "Excitation Wavelength (nm)",
+	"stokes"	: "Stokes Shift (nm)",
 	"E"			: "Extinction Coefficient",
 	"QY"		: "Quantum Yield",
 	"brightness": "Brightness",
