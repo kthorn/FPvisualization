@@ -23,7 +23,7 @@ var strings = {
 //shorter strings for the table
 var tableStrings = {
 	"Name"		: "Protein",
-	"lambda_em" : "&lambda;<sub>ex</sub> (nm)",
+	"lambda_ex" : "&lambda;<sub>ex</sub> (nm)",
 	"lambda_ex" : "&lambda;<sub>em</sub> (nm)",
 	"E"			: "EC",
 	"QY"		: "QY",
@@ -60,13 +60,21 @@ var colHeadStyles = {
 	"bleach" 	: 	"col head numeric",
 	"mature" 	: 	"col head numeric",
 	"lifetime" 	: 	"col head numeric",
-	};
-	
+};
+
+//Protein classes for tables
 var FPgroups = [
 		{"Name" : "UV", "ex_min" : 0, "ex_max" : 380, "em_min" : 0, "em_max" : 1000},
 		{"Name" : "Blue", "ex_min" : 380, "ex_max" : 420, "em_min" : 0, "em_max" : 470},
-		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530}];
-
+		{"Name" : "Cyan", "ex_min" : 421, "ex_max" : 472, "em_min" : 0, "em_max" : 530},
+		{"Name" : "Green", "ex_min" : 473, "ex_max" : 506, "em_min" : 480, "em_max" : 530},
+		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 530, "em_min" : 500, "em_max" : 540},
+		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 560, "em_min" : 550, "em_max" : 570},
+		{"Name" : "Red", "ex_min" : 561, "ex_max" : 600, "em_min" : 570, "em_max" : 620},
+		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 800, "em_min" : 620, "em_max" : 800},
+		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530},
+		{"Name" : "Long Stokes Shift", "ex_min" : 430, "ex_max" : 480, "em_min" : 580, "em_max" : 640}
+]
 
 //on page load, listen to slider events and respond by updating the filter ranges (and updating the ui)
 //this uses jQuery and jQuery UI which have been added to the head of the document.
@@ -428,9 +436,9 @@ columns = Object.keys(tableStrings); //column names
 //split up fluorescent proteins by type and add the relevant tables
 FPgroups.forEach( function(FPtype) {
 	function testfilt(element){
-		return element.lambda_ex > FPtype.ex_min && element.lambda_ex < FPtype.ex_max
-			&& element.lambda_em > FPtype.em_min && element.lambda_em < FPtype.em_max;
-	};
+		return element.lambda_ex >= FPtype.ex_min && element.lambda_ex < FPtype.ex_max
+			&& element.lambda_em >= FPtype.em_min && element.lambda_em < FPtype.em_max;
+	}
 
 	var table = d3.select("#table").append("h4")
 		.attr("class", "tablename")
