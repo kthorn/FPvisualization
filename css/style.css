@@ -151,6 +151,9 @@ tr {
 	border: 1px solid #ccc;
 }
 
+tr:nth-child(odd)		{ background-color:#fafafa; }
+tr:nth-child(even)		{ background-color:#fff; }
+
 th,
 td {
 	border: 1px solid #ccc;	
