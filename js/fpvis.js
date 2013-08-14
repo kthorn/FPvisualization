@@ -9,16 +9,64 @@ var qyRange = [0,1];
 var brightRange = [0,100]; 
 //string variables for updating the axis labels
 var strings = {
+	"lambda_em" : "Emission Wavelength (nm)",
+	"lambda_ex" : "Excitation Wavelength (nm)",
 	"E"			: "Extinction Coefficient",
 	"QY"		: "Quantum Yield",
 	"brightness": "Brightness",
-	"lambda_em" : "Emission Wavelength (nm)",
-	"lambda_ex" : "Excitation Wavelength (nm)",
 	"pka" 		: "pKa",
 	"bleach" 	: "Bleaching Half-life (s)",
 	"mature" 	: "Maturation Half-time (min)",
 	"lifetime" 	: "Lifetime (ns)",
 }
+
+//shorter strings for the table
+var tableStrings = {
+	"Name"		: "Protein",
+	"lambda_em" : "&lambda;<sub>ex</sub> (nm)",
+	"lambda_ex" : "&lambda;<sub>em</sub> (nm)",
+	"E"			: "EC",
+	"QY"		: "QY",
+	"brightness": "Brightness",
+	"pka" 		: "pKa",
+	"bleach" 	: "Bleaching (s)",
+	"mature" 	: "Maturation (min)",
+	"lifetime" 	: "Lifetime (ns)",
+	"RefNum"	: "Reference"
+}
+
+//style names for table entries
+var colStyles = {
+	"Name"		:	"col protein", 
+	"lambda_ex"	:	"col numeric", 
+	"lambda_em"	:	"col numeric", 
+	"E"			:	"col numeric", 
+	"QY"		:	"col numeric", 
+	"brightness":	"col numeric",
+	"pka" 		: 	"col numeric",
+	"bleach" 	: 	"col numeric",
+	"mature" 	: 	"col numeric",
+	"lifetime" 	: 	"col numeric",
+	};
+
+var colHeadStyles = {
+	"Name"		:	"col head protein", 
+	"lambda_ex"	:	"col head numeric", 
+	"lambda_em"	:	"col head numeric", 
+	"E"			:	"col head numeric", 
+	"QY"		:	"col head numeric", 
+	"brightness":	"col head numeric",
+	"pka" 		: 	"col head numeric",
+	"bleach" 	: 	"col head numeric",
+	"mature" 	: 	"col head numeric",
+	"lifetime" 	: 	"col head numeric",
+	};
+	
+var FPgroups = [
+		{"Name" : "UV", "ex_min" : 0, "ex_max" : 380, "em_min" : 0, "em_max" : 1000},
+		{"Name" : "Blue", "ex_min" : 380, "ex_max" : 420, "em_min" : 0, "em_max" : 470},
+		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530}];
+
 
 //on page load, listen to slider events and respond by updating the filter ranges (and updating the ui)
 //this uses jQuery and jQuery UI which have been added to the head of the document.
@@ -244,7 +292,7 @@ d3.csv("processedFPs.csv", function (data) {
 	]);
 	
 	plot();
-			
+	draw_table();	
 });
 
 function draw_graph(){
@@ -374,6 +422,48 @@ function plot(xvar,yvar,data){
 	svg.select(".x.axis.bottom").call(xAxis_bottom);
 	svg.select(".y.axis.left").call(yAxis_left);
 }
+
+function draw_table() {
+columns = Object.keys(tableStrings); //column names
+//split up fluorescent proteins by type and add the relevant tables
+FPgroups.forEach( function(FPtype) {
+	function testfilt(element){
+		return element.lambda_ex > FPtype.ex_min && element.lambda_ex < FPtype.ex_max
+			&& element.lambda_em > FPtype.em_min && element.lambda_em < FPtype.em_max;
+	};
+
+	var table = d3.select("#table").append("h4")
+		.attr("class", "tablename")
+		.text(FPtype.Name + " Proteins");
+	var table = d3.select("#table").append("table");
+
+	tdata = FPdata.filter(testfilt);			
+	table.append("tr")
+		.attr("class", "header")
+		.selectAll("th")
+		.data(columns)
+	.enter().append("th")
+		.html(function(d,i) { return tableStrings[columns[i]]; })
+		.attr("class", function(d,i) { return colHeadStyles[i]; });
+		
+	//populate the table
+	table.selectAll("tr.data")
+			.data(tdata)
+		.enter().append("tr")
+			.attr("class", "data")
+			.selectAll("td")
+			.data(function(d) {
+			return columns.map(function(column, colstyles) {
+				return {column: column, value: d[column], style: colStyles[column]};
+			});
+		})
+		.enter().append("td")
+		.text(function(d) { return d.value; })
+		.attr("class", function(d) { return d.style; });
+	}
+	);
+}
+	
 
 function doalittledance(int) {
 	var s = ["QY","E","lambda_em","lambda_ex","brightness"];

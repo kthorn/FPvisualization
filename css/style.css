@@ -9,13 +9,13 @@ body {
 {
 	stroke-width:0.2;
 	font-size: 12px;
-	text-redering: optimizeLegibility;
+	text-rendering: optimizeLegibility;
 }
 .axis text
 {
 	stroke-width:0.2;
 	font-size: 10px;
-	text-redering: optimizeLegibility;
+	text-rendering: optimizeLegibility;
 }
 .axis path,
 .axis line {
@@ -100,7 +100,6 @@ body {
 .bibliography {
 		font-family: sans-serif;
 		font-size: 12px;
-		text-rendering: optimizeLegibility;
 }
 .bibliography li{
 		padding-bottom: 6px;
@@ -109,3 +108,36 @@ body {
 circle { 
 	cursor: pointer; 
 }
+
+table
+{
+	border-collapse: collapse;
+	empty-cells: show;
+	border-spacing: 0;
+	border: 1px solid #ccc;
+	line-height: 1.4;
+	font-size: 14px;
+	width: 1000px;
+}
+
+tr {
+	border: 1px solid #ccc;
+}
+
+th,
+td {
+	border: 1px solid #ccc;	
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+.tablename h4 {
+	padding-bottom: 0px;
+	line-height: 0px;
+	padding-top: 10px;
+}
+
+.col.numeric
+{
+	text-align: right;
+}			
