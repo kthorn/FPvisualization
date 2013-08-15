@@ -65,16 +65,16 @@ var colHeadStyles = {
 
 //Protein classes for tables
 var FPgroups = [
-		{"Name" : "UV", "ex_min" : 0, "ex_max" : 380, "em_min" : 0, "em_max" : 1000},
-		{"Name" : "Blue", "ex_min" : 380, "ex_max" : 420, "em_min" : 0, "em_max" : 470},
-		{"Name" : "Cyan", "ex_min" : 421, "ex_max" : 472, "em_min" : 0, "em_max" : 530},
-		{"Name" : "Green", "ex_min" : 473, "ex_max" : 506, "em_min" : 480, "em_max" : 530},
-		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 530, "em_min" : 500, "em_max" : 540},
-		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 560, "em_min" : 550, "em_max" : 570},
-		{"Name" : "Red", "ex_min" : 561, "ex_max" : 600, "em_min" : 570, "em_max" : 620},
-		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 800, "em_min" : 620, "em_max" : 800},
-		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530},
-		{"Name" : "Long Stokes Shift", "ex_min" : 430, "ex_max" : 480, "em_min" : 580, "em_max" : 640}
+		{"Name" : "UV", "ex_min" : 0, "ex_max" : 380, "em_min" : 0, "em_max" : 1000, "color" : "#C080FF"},
+		{"Name" : "Blue", "ex_min" : 380, "ex_max" : 420, "em_min" : 0, "em_max" : 470, "color" : "#8080FF"},
+		{"Name" : "Cyan", "ex_min" : 421, "ex_max" : 472, "em_min" : 0, "em_max" : 530, "color" : "#80FFFF"},
+		{"Name" : "Green", "ex_min" : 473, "ex_max" : 506, "em_min" : 480, "em_max" : 530, "color" : "#80FF80"},
+		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 530, "em_min" : 500, "em_max" : 540, "color" : "#FFFF80"},
+		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 560, "em_min" : 550, "em_max" : 570, "color" : "#FFC080"},
+		{"Name" : "Red", "ex_min" : 561, "ex_max" : 600, "em_min" : 570, "em_max" : 620, "color" : "#FFA080"},
+		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 800, "em_min" : 620, "em_max" : 800, "color" : "#FF8080"},
+		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530, "color" : "#8080FF"},
+		{"Name" : "Long Stokes Shift", "ex_min" : 430, "ex_max" : 480, "em_min" : 580, "em_max" : 640, "color" : "#80A0FF"}
 ]
 
 //on page load, listen to slider events and respond by updating the filter ranges (and updating the ui)
@@ -441,10 +441,16 @@ FPgroups.forEach( function(FPtype) {
 			&& element.lambda_em >= FPtype.em_min && element.lambda_em < FPtype.em_max;
 	}
 
-	var table = d3.select("#table").append("h4")
-		.attr("class", "tablename")
-		.text(FPtype.Name + " Proteins");
+	// var table = d3.select("#table").append("h4")
+		// .attr("class", "tablename")
+		// .text(FPtype.Name + " Proteins");
 	var table = d3.select("#table").append("table");
+	//add title row
+	table.append("tr").append("th")
+		.attr("colspan", columns.length)
+		.attr("class", "tabletitle")
+		.style("background-color", FPtype.color)
+		.text(FPtype.Name + " Proteins");
 
 	tdata = FPdata.filter(testfilt);			
 	table.append("tr")
@@ -453,7 +459,7 @@ FPgroups.forEach( function(FPtype) {
 		.data(columns)
 	.enter().append("th")
 		.html(function(d,i) { return tableStrings[columns[i]]; })
-		.attr("class", function(d,i) { return colHeadStyles[i]; });
+		.attr("class", function(d,i) { return colHeadStyles[d]; });
 		
 	//populate the table
 	table.selectAll("tr.data")

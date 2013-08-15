@@ -96,9 +96,7 @@ circle {
 		padding-bottom: 6px;
 }
 
-
 /* Controls area */
-
 .radioboxes {
 	width:150px;
 	font-size: .82em;
@@ -116,7 +114,6 @@ circle {
 
 
 /* Misc Styles */
-
 .cf:before,
 .cf:after {
     content: " "; /* 1 */
@@ -127,15 +124,11 @@ circle {
     clear: both;
 }
 
-
 .hidden {
         display: none;
 }
 
-
-
 /* Table Styles */ 
-
 table
 {
 	border-collapse: collapse;
@@ -145,13 +138,14 @@ table
 	line-height: 1.4;
 	font-size: 14px;
 	width: 100%;
+	margin-top: 20px;
 }
 
 tr {
 	border: 1px solid #ccc;
 }
 
-tr:nth-child(odd)		{ background-color:#fafafa; }
+tr:nth-child(odd)		{ background-color:#f0f0f0; }
 tr:nth-child(even)		{ background-color:#fff; }
 
 th,
@@ -174,5 +168,10 @@ td {
 
 .col.protein {
 	width: 200px;		/* constant width here gives column width consistency to the different table groupings */
-	text-align: center;
-}	
+	text-align: left;
+}
+
+.tabletitle{	/*banner titles for tables*/
+text-align: left;
+font-size: 16px;
+}
