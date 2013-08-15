@@ -2,9 +2,9 @@
 var currentX = "lambda_ex" 
 var currentY = "lambda_em"
 //global variables to set the range over which the data is filtered
-var exRange = [350,620];
-var emRange = [410,680];
-var ecRange = [10000,140000];
+var exRange = [350,800];
+var emRange = [350,800];
+var ecRange = [1000,140000];
 var qyRange = [0,1];
 var brightRange = [0,100]; 
 //string variables for updating the axis labels
@@ -72,7 +72,8 @@ var FPgroups = [
 		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 530, "em_min" : 500, "em_max" : 540, "color" : "#FFFF80"},
 		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 560, "em_min" : 550, "em_max" : 570, "color" : "#FFC080"},
 		{"Name" : "Red", "ex_min" : 561, "ex_max" : 600, "em_min" : 570, "em_max" : 620, "color" : "#FFA080"},
-		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 800, "em_min" : 620, "em_max" : 800, "color" : "#FF8080"},
+		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 630, "em_min" : 620, "em_max" : 660, "color" : "#FF8080"},
+		{"Name" : "Near IR", "ex_min" : 631, "ex_max" : 800, "em_min" : 661, "em_max" : 800, "color" : "#B09090"},
 		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530, "color" : "#8080FF"},
 		{"Name" : "Long Stokes Shift", "ex_min" : 430, "ex_max" : 480, "em_min" : 580, "em_max" : 640, "color" : "#80A0FF"}
 ]
@@ -84,9 +85,9 @@ $(function() {
 	$( "#exSlider-range" ).slider({
       range: true,
       min: 350,
-      max: 620,
+      max: 800,
       step: 1,
-      values: [ 350, 620 ],
+      values: [ 350, 800 ],
       slide: function( event, ui ) {
         $( "#exRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
         exRange = ui.values;
@@ -100,10 +101,10 @@ $(function() {
 
     $( "#emSlider-range" ).slider({
       range: true,
-      min: 410,
-      max: 680,
+      min: 350,
+      max: 800,
       step: 1,
-      values: [ 410, 680 ],
+      values: [ 350, 800 ],
       slide: function( event, ui ) {
         $( "#emRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
         emRange = ui.values;
@@ -297,7 +298,7 @@ d3.csv("processedFPs.csv", function (data) {
 	//Only update max of saturation scale, so that gray corresponds to 0 brightness
 	//Use 90th percentile as max saturation so that not everything is muddy gray
 	saturationScale.domain([0, 
-		d3.quantile(FPdata.map(function(a) {return (+a.brightness)}).sort(),0.9)
+		d3.quantile(FPdata.map(function(a) {return (+a.brightness)}).sort(function(a,b){return a-b}),0.8)
 	]);
 	
 	plot();
@@ -350,7 +351,6 @@ function plot(xvar,yvar,data){
 	])
 	.nice();
 	zoom.y(yScale);
-
 
 	//relabel X and Y axes
 	svg.select(".x.label").text(strings[xvar])
@@ -473,7 +473,15 @@ FPgroups.forEach( function(FPtype) {
 			});
 		})
 		.enter().append("td")
-		.text(function(d) { return d.value; })
+		.html(function(d) { 
+			if (d.column == "RefNum"){
+				//add links to bibliography
+				return "<a href=\"#ref" + d.value + "\">" + d.value + "</a>";
+				}
+			else{
+				return d.value; 
+			}
+			})
 		.attr("class", function(d) { return d.style; });
 	}
 	);

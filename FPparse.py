@@ -126,7 +126,7 @@ with open(bibFileOut, 'wb') as htmlOut:
         bib = getBibFromDOI(indexDOI[k])
         if bib:
             bibstring = formatBibliography(bib)
-            outstring = "<li>" + bibstring +"</li>\r\n"
+            outstring = "<li id=\"ref" + str(k) + "\">" + bibstring +"</li>\r\n"
             #deal with unicode characters
             outstring = outstring.encode('ascii', 'xmlcharrefreplace')
             htmlOut.write(outstring)
