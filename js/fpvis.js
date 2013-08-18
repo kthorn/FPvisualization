@@ -47,8 +47,8 @@ var FPgroups = [
 		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 530, "em_min" : 500, "em_max" : 540, "color" : "#FFFF80"},
 		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 560, "em_min" : 550, "em_max" : 570, "color" : "#FFC080"},
 		{"Name" : "Red", "ex_min" : 561, "ex_max" : 600, "em_min" : 570, "em_max" : 620, "color" : "#FFA080"},
-		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 630, "em_min" : 620, "em_max" : 660, "color" : "#FF8080"},
-		{"Name" : "Near IR", "ex_min" : 631, "ex_max" : 800, "em_min" : 661, "em_max" : 800, "color" : "#B09090"},
+		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 630, "em_min" : 620, "em_max" : 1000, "color" : "#FF8080"},
+		{"Name" : "Near IR", "ex_min" : 631, "ex_max" : 800, "em_min" : 661, "em_max" : 1000, "color" : "#B09090"},
 		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530, "color" : "#8080FF"},
 		{"Name" : "Long Stokes Shift", "ex_min" : 430, "ex_max" : 480, "em_min" : 580, "em_max" : 640, "color" : "#80A0FF"}
 ]
@@ -98,7 +98,6 @@ $(function() {
 	$("#doalittledance").click(function(){doalittledance(1600);});
 	});
 
-
 //load the bibliography
 $("#bibliography").load('bibliography.html');
 
@@ -109,11 +108,10 @@ height = 700 - margin.top - margin.bottom;
 
 //Scales and axes
 var xScale = d3.scale.linear()
-			.range ([0, width])
+			.range ([0, width]);
 
 var yScale = d3.scale.linear()
-			.range ([height, 0])
-
+			.range ([height, 0]);
 
 //This scale will set the saturation (gray to saturated color).  We will use it for mapping brightness.
 var saturationScale = d3.scale.linear()
@@ -132,7 +130,6 @@ var yAxis_left = d3.svg.axis().scale(yScale).tickSize(5).orient("left").tickSubd
 //top and right axes are identical but without tick labels
 var xAxis_top = d3.svg.axis().scale(xScale).tickSize(5).orient("top").tickSubdivide(true).tickFormat(function (d) { return ''; });;;
 var yAxis_right = d3.svg.axis().scale(yScale).tickSize(5).orient("right").tickSubdivide(true).tickFormat(function (d) { return ''; });;
-
 
 // Create the SVG container and set the origin.
 var svg = d3.select("#graph").append("svg")
@@ -193,7 +190,6 @@ svg.append("rect")
 	.attr("width", width)
 	.attr("height", height)
 	.call(zoom);
-
 	
 var FPdata = []; //Where the fluorescent protein data table will end up.
 
@@ -210,7 +206,7 @@ d3.csv("processedFPs.csv", function (data) {
 	FPdata = data;
 	
 	//Only update max of saturation scale, so that gray corresponds to 0 brightness
-	//Use 90th percentile as max saturation so that not everything is muddy gray
+	//Use 80th percentile as max saturation so that not everything is muddy gray
 	saturationScale.domain([0, 
 		d3.quantile(FPdata.map(function(a) {return (+a.brightness)}).sort(function(a,b){return a-b}),0.8)
 	]);
@@ -230,7 +226,6 @@ function draw_graph(){
 		.attr("cx", function (d) { return xScale (d[currentX]); })
 		.attr("cy", function (d) { return yScale (d[currentY]); })
 }
-
 
 //i added this more flexible plotting function to be able to plot different variables on each axis.  It takes three optional parameters: the data array, and two axes variables.  
 function plot(xvar,yvar,data){
