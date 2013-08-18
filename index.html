@@ -5,9 +5,11 @@
 	<meta charset='utf-8'> 
 	<link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="css/sliders.css">
     <script src="http://code.jquery.com/jquery-1.9.1.js" charset="utf-8"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" charset="utf-8"></script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jQRangeSlider-min.js"></script>
 	
 </head>
 <body>
@@ -28,35 +30,7 @@
 
 	<div class="right">
 	
-		<p>
-		  <label for="exRange">Excitation &lambda; range:</label>
-		  <input type="text" id="exRange" style="border: 0; color: #f6931f; font-weight: bold;" />
-		</p>
-		<div id="exSlider-range"></div>
-		
-		<p>
-		  <label for="emRange">Emission &lambda; range:</label>
-		  <input type="text" id="emRange" style="border: 0; color: #f6931f; font-weight: bold;" />
-		</p>
-		<div id="emSlider-range"></div>
-
-		<p>
-		  <label for="ECamount">EC range:</label>
-		  <input type="text" id="ECamount" style="border: 0; color: #f6931f; font-weight: bold;" />
-		</p>
-		<div id="ECslider-range"></div>
-
-		<p>
-		  <label for="QYamount">QY range:</label>
-		  <input type="text" id="QYamount" style="border: 0; color: #f6931f; font-weight: bold;" />
-		</p>
-		<div id="QYslider-range"></div>
-
-		<p>
-		  <label for="BrightAmount">Brightness range:</label>
-		  <input type="text" id="BrightAmount" style="border: 0; color: #f6931f; font-weight: bold;" />
-		</p>
-		<div id="Brightslider-range"></div>
+		<div id="sliders"></div>
 
 		<div class="cf">
 			<div class="radioboxes">

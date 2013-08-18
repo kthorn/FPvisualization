@@ -1,12 +1,14 @@
 //global variables to hold the current variables plotted on each axis
 var currentX = "lambda_ex" 
 var currentY = "lambda_em"
-//global variables to set the range over which the data is filtered
-var exRange = [350,800];
-var emRange = [350,800];
-var ecRange = [1000,140000];
-var qyRange = [0,1];
-var brightRange = [0,100]; 
+//global varable to set the ranges over which the data is filtered.  
+var filters = {
+	"lambda_ex" : [350,800,1],		// array values represent [min range, max range, step (for the range slider)]
+	"lambda_em" : [350,800,1],
+	"E"			: [10000,140000,1000],
+	"QY"		: [0,1,0.01],
+	"brightness": [0,100,1]
+}
 //string variables for updating the axis labels
 var strings = {
 	"lambda_em" : "Emission Wavelength (nm)",
@@ -36,33 +38,6 @@ var tableStrings = {
 	"RefNum"	: "Reference"
 }
 
-//style names for table entries
-var colStyles = {
-	"Name"		:	"col protein", 
-	"lambda_ex"	:	"col numeric", 
-	"lambda_em"	:	"col numeric", 
-	"E"			:	"col numeric", 
-	"QY"		:	"col numeric", 
-	"brightness":	"col numeric",
-	"pka" 		: 	"col numeric",
-	"bleach" 	: 	"col numeric",
-	"mature" 	: 	"col numeric",
-	"lifetime" 	: 	"col numeric",
-	};
-
-var colHeadStyles = {
-	"Name"		:	"col head protein", 
-	"lambda_ex"	:	"col head numeric", 
-	"lambda_em"	:	"col head numeric", 
-	"E"			:	"col head numeric", 
-	"QY"		:	"col head numeric", 
-	"brightness":	"col head numeric",
-	"pka" 		: 	"col head numeric",
-	"bleach" 	: 	"col head numeric",
-	"mature" 	: 	"col head numeric",
-	"lifetime" 	: 	"col head numeric",
-};
-
 //Protein classes for tables
 var FPgroups = [
 		{"Name" : "UV", "ex_min" : 0, "ex_max" : 380, "em_min" : 0, "em_max" : 1000, "color" : "#C080FF"},
@@ -82,100 +57,38 @@ var FPgroups = [
 //this uses jQuery and jQuery UI which have been added to the head of the document.
 $(function() {
 	
-	$( "#exSlider-range" ).slider({
-      range: true,
-      min: 350,
-      max: 800,
-      step: 1,
-      values: [ 350, 800 ],
-      slide: function( event, ui ) {
-        $( "#exRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-        exRange = ui.values;
-        plot();
-      }
-    });
+	//dynamically generate filter sliders based on "filters" object
+	$.each(filters, function(i,v){
+		var label = $("<label class='rangeSlider' for="+i+">"+strings[i]+"</label>").appendTo("#sliders");
+		var slider = $("<div id='"+i+"' class='rangeSlider'/>").appendTo("#sliders");
 
-    $( "#exRange" ).val( $( "#exSlider-range" ).slider( "values", 0 ) + " - " +
-       $( "#exSlider-range" ).slider( "values", 1 ) + " nm");
-    
+		slider.rangeSlider({
+		 	bounds:{min: v[0], max: v[1]},
+		 	defaultValues:{min: v[0], max: v[1]},
+		 	step: v[2],
+		 	arrows: false,
+		 });
+	});
 
-    $( "#emSlider-range" ).slider({
-      range: true,
-      min: 350,
-      max: 800,
-      step: 1,
-      values: [ 350, 800 ],
-      slide: function( event, ui ) {
-        $( "#emRange" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-        emRange = ui.values;
-        plot();
-      }
-    });
+	// update filter settings when user changes slider
+	$(".rangeSlider").on("valuesChanging", function(e, data){
+		var filtID = $(this).attr('id');
+	  filters[filtID][0] = data.values.min;
+	  filters[filtID][1] = data.values.max;
+	  plot();
+	});
 
-    $( "#emRange" ).val( $( "#emSlider-range" ).slider( "values", 0 ) + " - " +
-       $( "#emSlider-range" ).slider( "values", 1 ) + " nm");
-
-
-    $( "#ECslider-range" ).slider({
-      range: true,
-      min: 10000,
-      max: 140000,
-      step: 1000,
-      values: [ 10000, 140000 ],
-      slide: function( event, ui ) {
-        $( "#ECamount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-        ecRange = ui.values;
-        plot();
-      }
-    });
-
-    $( "#ECamount" ).val( $( "#ECslider-range" ).slider( "values", 0 ) + " - " +
-       $( "#ECslider-range" ).slider( "values", 1 ) );
-
-
-    $( "#QYslider-range" ).slider({
-      range: true,
-      min: 0,
-      max: 1,
-      step: 0.01,
-      values: [ 0, 1 ],
-      slide: function( event, ui ) {
-        $( "#QYamount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-        qyRange = ui.values;
-        plot();
-      }
-    });
-
-    $( "#QYamount" ).val( $( "#QYslider-range" ).slider( "values", 0 ) + " - " +
-       $( "#QYslider-range" ).slider( "values", 1 ) );
-
-
-    $( "#Brightslider-range" ).slider({
-      range: true,
-      min: 0,
-      max: 100,
-      step: 1,
-      values: [ 0, 100 ],
-      slide: function( event, ui ) {
-        $( "#BrightAmount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-        brightRange = ui.values;
-        plot();
-      }
-    });
-
-    $( "#BrightAmount" ).val( $( "#Brightslider-range" ).slider( "values", 0 ) + " - " +
-       $( "#Brightslider-range" ).slider( "values", 1 ) );
 
     $("#Xradio").buttonsetv();
     $("#Yradio").buttonsetv();
 
     $( "#Xradio input" ).click(function() {
 	  currentX = $(this).val();
-	  plot(currentX, currentY);
+	  plot();
 	});
 	$( "#Yradio input" ).click(function() {
 	  currentY = $(this).val();
-	  plot(currentX, currentY);
+	  plot();
 	});
 
 	//easter egg
@@ -194,12 +107,10 @@ height = 700 - margin.top - margin.bottom;
 //Scales and axes
 var xScale = d3.scale.linear()
 			.range ([0, width])
-			.domain([300, 800])
-			.nice();
+
 var yScale = d3.scale.linear()
 			.range ([height, 0])
-			.domain([300, 800])
-			.nice();
+
 
 //This scale will set the saturation (gray to saturated color).  We will use it for mapping brightness.
 var saturationScale = d3.scale.linear()
@@ -326,13 +237,16 @@ function plot(xvar,yvar,data){
 	data = data || FPdata;
 
 	//filter the data according to the user settings for EC, QY, and brightness range
-	data = data.filter(function(d) {
-	    return d.QY > qyRange[0] && d.QY < qyRange[1] 
-	    	&& d.E > ecRange[0] && d.E < ecRange[1] 
-	    	&& d.brightness > brightRange[0] && d.brightness < brightRange[1] 
-	    	&& d.lambda_ex > exRange[0] && d.lambda_ex < exRange[1]
-	    	&& d.lambda_em > emRange[0] && d.lambda_em < emRange[1];
-	});
+	data = data.filter(function(d) {  return filtercheck(d) ? d : null; });
+
+	// helper function to iterate through all of the data filters (without having to type them all out)
+	function filtercheck(data){		
+		for (f in filters){
+			v = filters[f];
+			if( data[f] < v[0] || data[f] > v[1] ) {return false;}
+		}
+		return true;
+	}
 
 	//filter out data with empty values
 	data = data.filter(function(d) {return d[xvar] > 0 && d[yvar] > 0;});
@@ -459,7 +373,7 @@ FPgroups.forEach( function(FPtype) {
 		.data(columns)
 	.enter().append("th")
 		.html(function(d,i) { return tableStrings[columns[i]]; })
-		.attr("class", function(d,i) { return colHeadStyles[d]; });
+		.attr("class", function(d,i) { return (d == "Name") ? "col head protein" : "col head numeric"; }); // conditional here to limit the use of unneccesary global variables 
 		
 	//populate the table
 	table.selectAll("tr.data")
@@ -469,7 +383,8 @@ FPgroups.forEach( function(FPtype) {
 			.selectAll("td")
 			.data(function(d) {
 			return columns.map(function(column, colstyles) {
-				return {column: column, value: d[column], style: colStyles[column]};
+				var sty = (column == "Name") ? "col protein" : "col numeric"; // conditional here removes need for another "styles" table 
+				return {column: column, value: d[column], style: sty};
 			});
 		})
 		.enter().append("td")
