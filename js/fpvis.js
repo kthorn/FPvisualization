@@ -67,6 +67,9 @@ $(function() {
 		 	defaultValues:{min: v[0], max: v[1]},
 		 	step: v[2],
 		 	arrows: false,
+		 	formatter:function(val){
+		        return (Math.round(val * 100) / 100);
+		      }
 		 });
 	});
 
