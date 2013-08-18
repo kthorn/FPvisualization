@@ -113,12 +113,13 @@
   -moz-box-shadow: inset 0 1px 3px RGBA(0,0,0,0.5);
   box-shadow: inset 0 1px 3px RGBA(0,0,0,0.5);;
  }
-
+/* Commenting out until we can fix alignment issues
 #lambda_ex .ui-rangeSlider-bar, #lambda_em .ui-rangeSlider-bar{
-	background-image: url("../spectra.png");
+  background-image: url("../spectra.png");
   background-attachment:fixed;
-  background-position: 15px 0px;
+  background-position: -11% 0%;
  }
+ */
 
 label.rangeSlider {
   float: left;
