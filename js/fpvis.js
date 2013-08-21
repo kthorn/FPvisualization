@@ -41,13 +41,13 @@ var tableStrings = {
 //Protein classes for tables
 var FPgroups = [
 		{"Name" : "UV", "ex_min" : 0, "ex_max" : 380, "em_min" : 0, "em_max" : 1000, "color" : "#C080FF"},
-		{"Name" : "Blue", "ex_min" : 380, "ex_max" : 420, "em_min" : 0, "em_max" : 470, "color" : "#8080FF"},
-		{"Name" : "Cyan", "ex_min" : 421, "ex_max" : 472, "em_min" : 0, "em_max" : 530, "color" : "#80FFFF"},
-		{"Name" : "Green", "ex_min" : 473, "ex_max" : 506, "em_min" : 480, "em_max" : 530, "color" : "#80FF80"},
-		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 530, "em_min" : 500, "em_max" : 1000, "color" : "#FFFF80"},
-		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 555, "em_min" : 530, "em_max" : 569, "color" : "#FFC080"},
+		{"Name" : "Blue", "ex_min" : 380, "ex_max" : 421, "em_min" : 0, "em_max" : 470, "color" : "#8080FF"},
+		{"Name" : "Cyan", "ex_min" : 421, "ex_max" : 473, "em_min" : 0, "em_max" : 530, "color" : "#80FFFF"},
+		{"Name" : "Green", "ex_min" : 473, "ex_max" : 507, "em_min" : 480, "em_max" : 530, "color" : "#80FF80"},
+		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 531, "em_min" : 500, "em_max" : 1000, "color" : "#FFFF80"},
+		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 556, "em_min" : 530, "em_max" : 569, "color" : "#FFC080"},
 		{"Name" : "Red", "ex_min" : 556, "ex_max" : 600, "em_min" : 570, "em_max" : 620, "color" : "#FFA080"},
-		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 630, "em_min" : 620, "em_max" : 1000, "color" : "#FF8080"},
+		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 631, "em_min" : 620, "em_max" : 1000, "color" : "#FF8080"},
 		{"Name" : "Near IR", "ex_min" : 631, "ex_max" : 800, "em_min" : 661, "em_max" : 1000, "color" : "#B09090"},
 		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530, "color" : "#8080FF"},
 		{"Name" : "Long Stokes Shift", "ex_min" : 430, "ex_max" : 480, "em_min" : 580, "em_max" : 640, "color" : "#80A0FF"}
