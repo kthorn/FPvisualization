@@ -50,7 +50,8 @@ def getBibFromDOI(DOI):
     if 'issue' in rawbib:
         bibinfo['number'] = rawbib['issue']
     bibinfo['year'] = rawbib['issued']['date-parts'][0][0]
-    bibinfo['pages'] = rawbib['page']
+    if 'page' in rawbib:
+        bibinfo['pages'] = rawbib['page']
     bibinfo['url'] = rawbib['URL']
     bibinfo['doi'] = rawbib['DOI']    
     
@@ -80,7 +81,9 @@ def formatBibliography(bibinfo):
             citation += "(" + bibinfo['number'] +")"
     
     if not bibinfo['pages'] == "":
-        citation += ": " + bibinfo['pages'] + ". "
+        citation += ": " + bibinfo['pages']
+        
+    citation += ". "
     
     citation += "doi: <a target=\"_blank\" href=\"" + bibinfo['url'] +"\">" + bibinfo['doi'] + "</a>"
     return citation
