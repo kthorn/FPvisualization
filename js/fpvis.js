@@ -313,7 +313,7 @@ function plot(xvar,yvar,data){
 				.text(d.QY);
 			d3.select("#tooltip")
 				.select("h3")
-				.text(d.Name);
+				.html(d.Name);
 			d3.select("#tooltip")
 				.select("#brightnessvalue")
 				.text(d.brightness);
