@@ -7,6 +7,16 @@ body {
 }
 
 /* Graph Styles */
+.FP, .PSFP
+{
+	shape-rendering: geometricPrecision;
+	opacity: 0.7;
+}
+
+.PSFP
+{
+	stroke-width: 1.5px;
+}
 
 .label
 {
@@ -67,7 +77,6 @@ circle {
         font-size: 16px;
         line-height: 20px;
 }
-
 
 /* Content */
 

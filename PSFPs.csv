@@ -1,0 +1,16 @@
+"UID","Name","type","lambda_ex","lambda_em","lambda_sw","E","QY","brightness","Aggregation","pka","DOI"
+"kaede_1","Kaede","pc",508,518,,98800,0.88,86.9,"Tetramer",5.6,
+"kaede_2","Kaede","pc",572,580,,60400,0.33,19.9,"Tetramer",5.6,
+"kikgr1_1","KikGR1","pc",507,517,,53700,0.7,37.6,"Tetramer",7.8,
+"kikgr1_2","KikGR1","pc",583,593,,35100,0.65,22.8,"Tetramer",5.5,
+"pscfp2_1","PS-CFP2","pc",400,468,,43000,0.2,8.6,"Monomer",,
+"pscfp2_2","PS-CFP2","pc",490,511,,47000,0.23,10.8,"Monomer",,
+"meos2_1","mEos2","pc",506,519,,56000,0.84,47,"Monomer",5.6,
+"meos2_2","mEos2","pc",573,584,,46000,0.66,30.4,"Monomer",6.4,
+"meos3.2_1","Meos3.2","pc",507,516,,63400,0.7,53,"Monomer",5.4,
+"meos3.2_2","Meos3.2","pc",572,580,,32200,0.55,18,"Monomer",5.8,
+"psmorange_1","PSmOrange","pc",548,565,,113300,0.51,57.8,"Monomer",6.2,"10.1038/nmeth.1664 "
+"psmorange_2","PSmOrange","pc",634,662,,32700,0.28,9.2,"Monomer",5.6,"10.1038/nmeth.1664 "
+"PA-GFP","PA-GFP","pa",504,517,400,17400,0.79,13.7,"Monomer",,"10.1126/science.1074952 "
+"PAmCherry1","PAmCherry1","pa",564,595,405,18000,0.46,8.3,"Monomer",6.3,"10.1038/nmeth.1298 "
+"PATagRFP","PATagRFP","pa",562,595,405,66000,0.38,25.1,"Monomer",5.3,"10.1021/ja100906g "

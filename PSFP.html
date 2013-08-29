@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fluorescent protein properties</title>
+	<meta charset='utf-8'> 
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" type="text/css" href="css/sliders.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.js" charset="utf-8"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" charset="utf-8"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/jQRangeSlider-min.js"></script>
+	<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>
+	<script src="js/ga.js"></script>
+	
+</head>
+<body>
+	<h1 align="middle">Photoswitchable Fluorescent Protein Properties</h1>
+	<div class="cf">
+	<div class="left">
+		
+		<div id="graph"></div> 
+		<div id="tooltip" class="hidden">
+		        <h3>FPname</h3>
+		        <p>Ex: <span id="exvalue"></span>nm</p>
+		        <p>Em: <span id="emvalue"></span>nm</p>
+		        <p>EC: <span id="ecvalue"></span></p>
+		        <p>QY: <span id="qyvalue"></span></p>
+		        <p>Brightness: <span id="brightnessvalue"></span></p>
+		</div>
+	</div>
+
+	<div class="right">
+	
+		<div id="sliders"></div>
+
+		<div class="cf">
+			<div class="radioboxes">
+			<h2> X Axis </h2>
+			<div id="Xradio">
+			  <input type="radio" id="Xlambda_ex" name="Xradio" value="lambda_ex" checked="checked" /><label for="Xlambda_ex">Excitation &lambda;</label>
+			  <input type="radio" id="Xlambda_em" name="Xradio" value="lambda_em"/><label for="Xlambda_em">Emission &lambda;</label>
+			  <input type="radio" id="Xstokes" name="Xradio" value="stokes"/><label for="Xstokes">Stokes Shift</label>
+			  <input type="radio" id="XEC" name="Xradio" value="E"/><label for="XEC">EC</label>
+			  <input type="radio" id="XQY" name="Xradio" value="QY"/><label for="XQY">QY</label>
+			  <input type="radio" id="Xbrightness" name="Xradio" value="brightness"/><label for="Xbrightness">Brightness</label>
+			  <input type="radio" id="Xpka" name="Xradio" value="pka"/><label for="Xpka">pKa</label>
+			  <input type="radio" id="Xbleach" name="Xradio" value="bleach"/><label for="Xbleach">Stability</label>
+			  <input type="radio" id="Xmature" name="Xradio" value="mature"/><label for="Xmature">Maturation</label>
+			</div>
+			</div>
+
+			<div class="radioboxes">
+			<h2> Y Axis </h2>
+			<div id="Yradio">
+			  <input type="radio" id="Ylambda_ex" name="Yradio" value="lambda_ex"/><label for="Ylambda_ex">Excitation &lambda;</label>
+			  <input type="radio" id="Ylambda_em" name="Yradio" value="lambda_em" checked="checked" /><label for="Ylambda_em">Emission &lambda;</label>
+			  <input type="radio" id="Ystokes" name="Yradio" value="stokes"/><label for="Ystokes">Stokes Shift</label>
+			  <input type="radio" id="YEC" name="Yradio" value="E"/><label for="YEC">EC</label>
+			  <input type="radio" id="YQY" name="Yradio" value="QY"/><label for="YQY">QY</label>
+			  <input type="radio" id="Ybrightness" name="Yradio" value="brightness"/><label for="Ybrightness">Brightness</label>
+			  <input type="radio" id="Ypka" name="Yradio" value="pka"/><label for="Ypka">pKa</label>
+			  <input type="radio" id="Ybleach" name="Yradio" value="bleach"/><label for="Ybleach">Stability</label>
+			  <input type="radio" id="Ymature" name="Yradio" value="mature"/><label for="Ymature">Maturation</label>
+			</div>
+			</div>
+		</div>
+
+	</div>
+	</div>
+	<p id="blurb">Each fluorescent protein begins plotted with excitation wavelength on the x-axis and emission wavelength on the y-axis. The color is set 
+		based on its emission wavelength, and fades to gray as the brightness (product of exctinction coefficient and quantum yield) decreases. 
+		Mouseover each circle to see info on that protein or click on any datapoint to see the corresponding reference on PubMed.  You can zoom using the mouse scroll wheel and pan by clicking and dragging. Use the filter sliders at the top right to select a subset of fluorescent proteins based on certain criteria.  Use the X and Y axis toggle boxes to change what is plotted on each axis.</p>
+	<div id="table"></div>	
+	<h4>Bibliography</h4>
+	<div id="bibliography" class="bibliography"></div>
+	<div class="footer">
+		<p>Developed by Talley Lambert and Kurt Thorn</p>
+		<a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 Unported License</a>.
+	</div>
+	
+</body>
+<script type="text/javascript" src="js/psfpvis.js"></script>
+</html>
