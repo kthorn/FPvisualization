@@ -234,6 +234,24 @@ d3.csv("PSFPs.csv", function (data) {
 		});
 		
 		linkdata = links;
+		
+		//we have to generate separate markers for each line since markers can't inherit line color
+		//do this here because we only have to do it once
+		var markers = defs.selectAll("marker").data(links, function (d){ return d.state1;});
+		markers.enter().append("marker")
+			.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
+			.attr("fill", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
+			.attr("id", function (d){ return "arrowhead" + d.state1;})
+			.attr("viewBox", "0 -5 10 10")
+			.attr("refX", 8)
+			.attr("refY", 0)
+			.attr("markerUnits", "strokeWidth")
+			.attr("markerWidth", 5)
+			.attr("markerHeight", 5)
+			.attr("orient", "auto")
+		 .append("path")
+			.attr("d", "M0,-5L10,0L0,5");
+		
 		plot();
 		draw_table();
 	});		
@@ -376,21 +394,7 @@ function plot(xvar,yvar,data,links){
 	    .duration(800); //change this number to speed up or slow down the animation
 		
 	//Add links for photoconvertible proteins
-	//we have to generate separate markers for each line since markers can't inherit line color
-	var markers = defs.selectAll("marker").data(links, function (d){ return d.state1;});
-	markers.enter().append("marker")
-		.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
-		.attr("fill", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
-		.attr("id", function (d){ return "arrowhead" + d.state1;})
-		.attr("viewBox", "0 -5 10 10")
-		.attr("refX", 8)
-		.attr("refY", 0)
-		.attr("markerUnits", "strokeWidth")
-		.attr("markerWidth", 5)
-		.attr("markerHeight", 5)
-		.attr("orient", "auto")
-	 .append("path")
-		.attr("d", "M0,-5L10,0L0,5");
+
 	
 	var line = plotarea.selectAll("line.PSFP").data(links, function (d){ return d.state1;});
 	line.enter().append("line")

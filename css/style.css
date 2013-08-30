@@ -44,7 +44,9 @@ body {
 {
 	fill: none;
 	pointer-events: all;
+	cursor: default;
 }
+rect,
 circle { 
 	cursor: pointer;  /* this is to make the circles appear "clickable" upon hover */
 }
