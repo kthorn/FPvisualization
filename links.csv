@@ -1,7 +1,8 @@
-"state1","state2","lambda_sw"
-"kaede_1","kaede_2",405
-"kikgr1_1","kikgr1_2",405
-"pscfp2_1","pscfp2_2",405
-"meos2_1","meos2_2",405
-"meos3.2_1","meos3.2_2",405
-"psmorange_1","psmorange_2",480
+state1,state2,lambda_sw
+kaede_1,kaede_2,405
+kikgr1_1,kikgr1_2,405
+pscfp2_1,pscfp2_2,405
+meos2_1,meos2_2,405
+meos3.2_1,meos3.2_2,405
+psmorange_1,psmorange_2,480
+mmaple_1,mmaple_2,380
