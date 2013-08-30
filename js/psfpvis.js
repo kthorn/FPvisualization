@@ -27,6 +27,7 @@ var strings = {
 //shorter strings for the table
 var tableStrings = {
 	"Name"		: "Protein",
+	"state"		: "State",
 	"lambda_ex" : "&lambda;<sub>ex</sub> (nm)",
 	"lambda_em" : "&lambda;<sub>em</sub> (nm)",
 	"E"			: "EC",
@@ -339,7 +340,7 @@ function plot(xvar,yvar,data,links){
 	circle.enter().append("circle")
 		.attr("class", "PSFP")
 		.attr("r", symbolsize)
-		.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
+		.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_on), 1, 0.5)})
 		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)})
 		.on('click', function(e){
     		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
@@ -474,6 +475,7 @@ FPgroups.forEach( function(FPtype) {
 		.style("background-color", FPtype.color)
 		.text(FPtype.Name + " Proteins");
 
+	//filter table data
 	tdata = FPdata.filter(testfilt);			
 	table.append("tr")
 		.attr("class", "header")
@@ -490,7 +492,7 @@ FPgroups.forEach( function(FPtype) {
 			.attr("class", "data")
 			.selectAll("td")
 			.data(function(d) {
-			return columns.map(function(column, colstyles) {
+			return columns.map(function(column) {
 				var sty = (column == "Name") ? "col protein" : "col numeric"; // conditional here removes need for another "styles" table 
 				return {column: column, value: d[column], style: sty};
 			});
