@@ -1,7 +1,7 @@
 //global variables to hold the current variables plotted on each axis
 var currentX = "lambda_ex" 
 var currentY = "lambda_em"
-var symbolsize = 8; //radius of circle
+var symbolsize = 7; //radius of circle
 //global varable to set the ranges over which the data is filtered.  
 var filters = {
 	"lambda_ex" : [350,800,1],		// array values represent [min range, max range, step (for the range slider)]
@@ -42,7 +42,8 @@ var tableStrings = {
 //Protein classes for tables
 var FPgroups = [
 		{"Name" : "Photoactivatible", "type" : "pa", "color" : "#808080"},
-		{"Name" : "Photoconvertible", "type" : "pc", "color" : "#808080"}
+		{"Name" : "Photoconvertible", "type" : "pc", "color" : "#808080"},
+		{"Name" : "Photoswitchable", "type" : "ps", "color" : "#808080"}
 ]
 
 //on page load, listen to slider events and respond by updating the filter ranges (and updating the ui)
@@ -72,7 +73,6 @@ $(function() {
 	  filters[filtID][1] = data.values.max;
 	  plot();
 	});
-
 
     $("#Xradio").buttonsetv();
     $("#Yradio").buttonsetv();
@@ -169,6 +169,9 @@ svg.append("clipPath")                  //Make a new clipPath
 		.append("rect")                     
 		.attr("width", width)
 		.attr("height", height);
+		
+// Create definition for arrowhead on lines
+defs = svg.append("defs"); //where marker definitions will go
 	
 //enable zooming	
 var zoom = d3.behavior.zoom()
@@ -212,8 +215,7 @@ d3.csv("PSFPs.csv", function (data) {
 		d3.quantile(FPdata.map(function(a) {return (+a.brightness)}).sort(function(a,b){return a-b}),0.8)
 	]);
 	
-	d3.csv("links.csv", function (links) {
-		
+	d3.csv("links.csv", function (links) {		
 		links.forEach(function(link){
 			//populate link data with appropriate starting and ending coordinates
 			link.lambda = +link.lambda;
@@ -311,7 +313,7 @@ function plot(xvar,yvar,data,links){
 	svg.select(".y.label").text(strings[yvar])
 	
 	//filter out just photoactivatible proteins, plot them as circles
-	PAdata = data.filter(function(d) {return d.type == "pa"; });
+	PAdata = data.filter(function(d) {return d.type == "pa" || d.type =="ps"; });
 	// Join new data with old elements, if any.
 	var circle = plotarea.selectAll("circle.PSFP").data(PAdata, function (d){ return d.UID;});
 
@@ -374,10 +376,27 @@ function plot(xvar,yvar,data,links){
 	    .duration(800); //change this number to speed up or slow down the animation
 		
 	//Add links for photoconvertible proteins
+	//we have to generate separate markers for each line since markers can't inherit line color
+	var markers = defs.selectAll("marker").data(links, function (d){ return d.state1;});
+	markers.enter().append("marker")
+		.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
+		.attr("fill", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
+		.attr("id", function (d){ return "arrowhead" + d.state1;})
+		.attr("viewBox", "0 -5 10 10")
+		.attr("refX", 8)
+		.attr("refY", 0)
+		.attr("markerUnits", "strokeWidth")
+		.attr("markerWidth", 5)
+		.attr("markerHeight", 5)
+		.attr("orient", "auto")
+	 .append("path")
+		.attr("d", "M0,-5L10,0L0,5");
+	
 	var line = plotarea.selectAll("line.PSFP").data(links, function (d){ return d.state1;});
 	line.enter().append("line")
 		.attr("class", "PSFP")
 		.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
+		.attr("marker-end", function (d){ return "url(#arrowhead" + d.state1 +")";})
 		.call(zoom);
 		
 	line.exit().remove();
