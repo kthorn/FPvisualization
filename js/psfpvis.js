@@ -92,7 +92,7 @@ $(function() {
 	});
 
 //load the bibliography
-$("#bibliography").load('bibliography.html');
+$("#bibliography").load('PSFPs_bibliography.html');
 
 // Chart dimensions.
 var margin = {top: 20, right: 30, bottom: 20, left: 50},
@@ -195,7 +195,7 @@ var FPdata = []; //Where the fluorescent protein data table will end up.
 var linkdata = []; //links between photoconvertible states
 
 // load the csv file and plot it
-d3.csv("PSFPs.csv", function (data) {
+d3.csv("PSFPs_processed.csv", function (data) {
 	data.forEach(function(d){
 		d.lambda_em = +d.lambda_em;		// typing these variables here for simplicity of code later on
 		d.lambda_ex = +d.lambda_ex;

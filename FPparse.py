@@ -8,6 +8,7 @@ Created on Sat Aug 10 15:10:17 2013
 import urllib2
 import csv
 import json
+import argparse
 
 def getBibFromDOI(DOI):
     """Query dx.doi.org and return bibliographic information
@@ -90,9 +91,14 @@ def formatBibliography(bibinfo):
     
 
 #Main code here
-csvFileIn = 'FPs.csv'
-csvFileOut = 'processedFPs.csv'
-bibFileOut = 'bibliography.html'
+#input file
+parser = argparse.ArgumentParser()
+parser.add_argument("infile", help="Input CSV file to generate references for")
+args = parser.parse_args()
+csvFileIn = args.infile
+basename = args.infile.split('.csv')
+csvFileOut = basename[0] + '_processed.csv'
+bibFileOut = basename[0] + '_bibliography.html'
 DOIindex = dict() #here is where we store the mapping of DOI the order of appearance
 maxRefNum = 1;
 

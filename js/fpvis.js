@@ -99,7 +99,7 @@ $(function() {
 	});
 
 //load the bibliography
-$("#bibliography").load('bibliography.html');
+$("#bibliography").load('FPs_bibliography.html');
 
 // Chart dimensions.
 var margin = {top: 20, right: 30, bottom: 20, left: 50},
@@ -194,7 +194,7 @@ svg.append("rect")
 var FPdata = []; //Where the fluorescent protein data table will end up.
 
 // load the csv file and plot it
-d3.csv("processedFPs.csv", function (data) {
+d3.csv("FPs_processed.csv", function (data) {
 	data.forEach(function(d){
 		d.lambda_em = +d.lambda_em;		// typing these variables here for simplicity of code later on
 		d.lambda_ex = +d.lambda_ex;
