@@ -486,31 +486,49 @@ FPgroups.forEach( function(FPtype) {
 		.attr("class", function(d,i) { return (d == "Name") ? "col head protein" : "col head numeric"; }); // conditional here to limit the use of unneccesary global variables 
 		
 	//populate the table
-	table.selectAll("tr.data")
-			.data(tdata)
-		.enter().append("tr")
-			.attr("class", "data")
-			.selectAll("td")
-			.data(function(d) {
-			return columns.map(function(column) {
-				var sty = (column == "Name") ? "col protein" : "col numeric"; // conditional here removes need for another "styles" table 
-				return {column: column, value: d[column], style: sty};
-			});
-		})
-		.enter().append("td")
-		.html(function(d) { 
-			if (d.column == "RefNum"){
-				//add links to bibliography
-				return "<a href=\"#ref" + d.value + "\">" + d.value + "</a>";
-				}
-			else{
-				return d.value; 
+	//Can't use d3's data binding because we want to group different states of
+	//the same molecule as these in different rows of the data table.
+	
+	//Get list of all unique proteins from dataset
+	var FPnames = d3.set(tdata.map(function (d) {return d.Name;}));
+	FPnames.forEach( function(currprotein) {
+		//Get all states for current protein
+		var proteinData = tdata.filter(function(d) {return d.Name == currprotein;});
+		var nStates = proteinData.length;
+		for (var i=0; i < nStates; i++){
+			//Add row
+			var row = table.append("tr").attr("class", "data");
+			
+			if (i == 0){
+			//First row, add protein name with rowspan
+			row.append("td")
+				.attr("class", "col protein")
+				.attr("rowspan", nStates)
+				.html(currprotein);
 			}
-			})
-		.attr("class", function(d) { return d.style; });
-	}
-	);
-}
+			//loop over remaining data columns
+			for (var key in tableStrings) {
+				if (tableStrings.hasOwnProperty(key) && key != "Name") {
+					console.log(key + " " + proteinData[i][key]);
+					
+					//format text to print in table cell
+					var text = "";
+					if (key == "RefNum"){
+						//add links to bibliography
+							text = "<a href=\"#ref" + proteinData[i][key] + "\">" + proteinData[i][key] + "</a>";
+						}
+						else{
+							text = proteinData[i][key];
+						}
+					row.append("td")
+						.attr("class", "col numeric")
+						.html(text);
+				}
+			}		
+		}
+	});
+});
+};
 
 function doalittledance(int) {
 	var s = ["QY","E","lambda_em","lambda_ex","brightness"];
