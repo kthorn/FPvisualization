@@ -1,20 +1,25 @@
 UID,Name,state,type,lambda_ex,lambda_em,lambda_on,lambda_off,E,QY,brightness,Aggregation,pka,initialState,bleach,mature,lifetime,DOI,RefNum
-kaede_1,Kaede,Green,pc,508,518,,,98800,0.88,86.9,Tetramer,5.6,,,,,,
-kaede_2,Kaede,Red,pc,572,580,,,60400,0.33,19.9,Tetramer,5.6,,,,,,
-kikgr1_1,KikGR1,Green,pc,507,517,,,53700,0.7,37.6,Tetramer,7.8,,,,,,
-kikgr1_2,KikGR1,Red,pc,583,593,,,35100,0.65,22.8,Tetramer,5.5,,,,,,
+kaede_1,Kaede,Green,pc,508,518,,,98800,0.88,86.9,Tetramer,5.6,Green,,,,10.1073/pnas.202320599 ,1
+kaede_2,Kaede,Red,pc,572,580,,,60400,0.33,19.9,Tetramer,5.6,,,,,10.1073/pnas.202320599 ,1
+kikgr1_1,KikGR1,Green,pc,507,517,,,53700,0.7,37.6,Tetramer,7.8,,,,,10.1038/sj.embor.7400361 ,2
+kikgr1_2,KikGR1,Red,pc,583,593,,,35100,0.65,22.8,Tetramer,5.5,,,,,10.1038/sj.embor.7400361 ,2
 pscfp2_1,PS-CFP2,Cyan,pc,400,468,,,43000,0.2,8.6,Monomer,,,,,,,
 pscfp2_2,PS-CFP2,Green,pc,490,511,,,47000,0.23,10.8,Monomer,,,,,,,
-meos2_1,mEos2,Green,pc,506,519,,,56000,0.84,47,Monomer,5.6,,,,,,
-meos2_2,mEos2,Red,pc,573,584,,,46000,0.66,30.4,Monomer,6.4,,,,,,
-meos3.2_1,Meos3.2,Green,pc,507,516,,,63400,0.7,53,Monomer,5.4,,,,,,
-meos3.2_2,Meos3.2,Red,pc,572,580,,,32200,0.55,18,Monomer,5.8,,,,,,
-psmorange_1,PSmOrange,Orange,pc,548,565,,,113300,0.51,57.8,Monomer,6.2,,,,,10.1038/nmeth.1664 ,1
-psmorange_2,PSmOrange,Far-red,pc,634,662,,,32700,0.28,9.2,Monomer,5.6,,,,,10.1038/nmeth.1664 ,1
-PA-GFP,PA-GFP,On,pa,504,517,400,,17400,0.79,13.7,Monomer,,off,,,,10.1126/science.1074952 ,2
-PAmCherry1,PAmCherry1,On,pa,564,595,405,,18000,0.46,8.3,Monomer,6.3,off,,,,10.1038/nmeth.1298 ,3
-PATagRFP,PATagRFP,On,pa,562,595,405,,66000,0.38,25.1,Monomer,5.3,off,,,,10.1021/ja100906g ,4
-mmaple_1,mMaple,Green,pc,489,505,,,15000,0.74,11.1,Monomer,8.2,,,,,10.1371/journal.pone.0051314,5
-mmaple_2,mMaple,Red,pc,566,583,,,30000,0.56,16.8,Monomer,7.3,,,,,10.1371/journal.pone.0051314,5
-dreiklang,Dreiklang,On,ps,511,529,412,,83000,0.41,34,Monomer,7.2,on,,120,,10.1038/nbt.1952,6
-rsEGFP,rsEGFP,On,ps,493,510,396,,47000,0.36,16.9,Monomer,6.5,on,,180,,10.1038/nature10497,7
+meos2_1,mEos2,Green,pc,506,519,,,56000,0.84,47,Monomer,5.6,,,,,10.1038/nmeth.1296 ,3
+meos2_2,mEos2,Red,pc,573,584,,,46000,0.66,30.4,Monomer,6.4,,,,,10.1038/nmeth.1296 ,3
+meos3.2_1,Meos3.2,Green,pc,507,516,,,63400,0.7,53,Monomer,5.4,,,20,,10.1038/nmeth.2021 ,4
+meos3.2_2,Meos3.2,Red,pc,572,580,,,32200,0.55,18,Monomer,5.8,,,,,10.1038/nmeth.2021 ,4
+psmorange_1,PSmOrange,Orange,pc,548,565,,,113300,0.51,57.8,Monomer,6.2,,,96,,10.1038/nmeth.1664 ,5
+psmorange_2,PSmOrange,Far-red,pc,634,662,,,32700,0.28,9.2,Monomer,5.6,,,,,10.1038/nmeth.1664 ,5
+PA-GFP,PA-GFP,On,pa,504,517,400,,17400,0.79,13.7,Monomer,,off,,,,10.1126/science.1074952 ,6
+PAmCherry1,PAmCherry1,On,pa,564,595,405,,18000,0.46,8.3,Monomer,6.3,off,,,,10.1038/nmeth.1298 ,7
+PATagRFP,PATagRFP,On,pa,562,595,405,,66000,0.38,25.1,Monomer,5.3,off,,,,10.1021/ja100906g ,8
+mmaple_1,mMaple,Green,pc,489,505,,,15000,0.74,11.1,Monomer,8.2,,,,,10.1371/journal.pone.0051314,9
+mmaple_2,mMaple,Red,pc,566,583,,,30000,0.56,16.8,Monomer,7.3,,,,,10.1371/journal.pone.0051314,9
+dreiklang,Dreiklang,On,ps,511,529,412,,83000,0.41,34,Monomer,7.2,on,,120,,10.1038/nbt.1952,10
+rsEGFP,rsEGFP,On,ps,493,510,396,,47000,0.36,16.9,Monomer,6.5,on,,180,,10.1038/nature10497,11
+PamKate,PamKate2,On,pa,586,628,442,,25000,0.18,4.5,Monomer,5.6,on,,19,,10.1016/j.bpj.2011.07.049 ,12
+psmorange2_1,PsmOrange2,Orange,pc,546,561,,,51000,0.61,31.1,Monomer,6.6,,,210,,10.1021/ja3034137 ,13
+psmorange2_2,PsmOrange2,Far-red,pc,619,651,,,18900,0.38,7.2,Monomer,5.4,,,,,10.1021/ja3034137 ,13
+mirisfp_1,mIrisFP,Green,ps,486,516,386,486,47000,0.54,25.4,Monomer,5.4,,,14,,10.1038/nmeth.1477 ,14
+mirisfp_2,mIrisFP,Red,ps,546,578,446,546,33000,0.59,19.5,Monomer,7.6,,,,,10.1038/nmeth.1477 ,14

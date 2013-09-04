@@ -338,7 +338,8 @@ function plot(xvar,yvar,data,links){
 
 	// Create new elements as needed.
 	circle.enter().append("circle")
-		.attr("class", "PSFP")
+		.attr("class", function(d) {
+			return d.type == "pa" ? "PSFP" : "PSFP ps";})
 		.attr("r", symbolsize)
 		.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_on), 1, 0.5)})
 		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)})
@@ -508,21 +509,25 @@ FPgroups.forEach( function(FPtype) {
 			}
 			//loop over remaining data columns
 			for (var key in tableStrings) {
-				if (tableStrings.hasOwnProperty(key) && key != "Name") {
-					console.log(key + " " + proteinData[i][key]);
-					
+				if (tableStrings.hasOwnProperty(key) && key != "Name") {		
 					//format text to print in table cell
 					var text = "";
 					if (key == "RefNum"){
 						//add links to bibliography
-							text = "<a href=\"#ref" + proteinData[i][key] + "\">" + proteinData[i][key] + "</a>";
+						//make references rowspan to avoid duplication for each state
+						if (i==0){
+							row.append("td")
+								.attr("class", "col numeric")
+								.attr("rowspan", nStates)
+								.html("<a href=\"#ref" + proteinData[i][key] + "\">" + proteinData[i][key] + "</a>");
+							}
 						}
 						else{
-							text = proteinData[i][key];
+						row.append("td")
+							.attr("class", "col numeric")
+							.html(proteinData[i][key]);
 						}
-					row.append("td")
-						.attr("class", "col numeric")
-						.html(text);
+
 				}
 			}		
 		}

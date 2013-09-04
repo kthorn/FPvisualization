@@ -17,6 +17,15 @@ body {
 {
 	stroke-width: 1.5px;
 }
+line.PSFP
+{
+	stroke-width: 1px;
+}
+
+.PSFP.ps
+{
+	stroke-dasharray: 3,2; /*make photoswitchable proteins dashed */
+}
 
 .label
 {
