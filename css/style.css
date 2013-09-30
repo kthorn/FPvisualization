@@ -191,7 +191,7 @@ td {
 }		
 
 .col.protein {
-	width: 200px;		/* constant width here gives column width consistency to the different table groupings */
+	width: 100px;		/* constant width here gives column width consistency to the different table groupings */
 	text-align: left;
 }
 

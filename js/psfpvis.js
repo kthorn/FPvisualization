@@ -300,8 +300,6 @@ function plot(xvar,yvar,data,links){
 			goodFPs.push(d.Name);
 		}
 	}
-	data = data.filter(function(d) { return goodFPs.indexOf(d.Name) > -1; });
-	links = links.filter(function(d) { return goodFPs.indexOf(d.Name) > -1; });
 
 	// helper function to iterate through all of the data filters (without having to type them all out)
 	function filtercheck(data){		
@@ -311,6 +309,11 @@ function plot(xvar,yvar,data,links){
 		}
 		return true;
 	}
+	data = data.filter(function(d) { return goodFPs.indexOf(d.Name) > -1; });
+	links = links.filter(function(d) { return goodFPs.indexOf(d.Name) > -1; });
+	
+	//additionally remove off states from data; we don't need to show them. These are found by looking for lambda_ex = 0
+	data = data.filter(function(d) { return d.lambda_ex > 0; });
 
 	//update scale domains based on data
 	xScale.domain([
@@ -396,7 +399,9 @@ function plot(xvar,yvar,data,links){
 	    .duration(800); //change this number to speed up or slow down the animation
 		
 	//Add links for photoconvertible proteins
-
+	//remove links that go to proteins in the off state (those with lambda_ex = 0);
+	
+	links = links.filter(function(d) { return !d.lambda_ex.some( function(w) { return w == 0}) });
 	
 	var line = plotarea.selectAll("line.PSFP").data(links, function (d){ return d.state1;});
 	line.enter().append("line")
@@ -477,7 +482,10 @@ FPgroups.forEach( function(FPtype) {
 		.text(FPtype.Name + " Proteins");
 
 	//filter table data
-	tdata = FPdata.filter(testfilt);			
+	//remove proteins with lambda_ex = 0 (off states)
+	tdata = FPdata.filter(function(d) {return d.lambda_ex > 0;});
+	
+	tdata = tdata.filter(testfilt);			
 	table.append("tr")
 		.attr("class", "header")
 		.selectAll("th")
@@ -534,6 +542,27 @@ FPgroups.forEach( function(FPtype) {
 	});
 });
 };
+
+function generate_transitions(name) {
+	//get all transitions for the protein with the given name
+	var proteinData = FPdata.filter(function(d) {return d.Name == name;});
+	//build a list of all states
+	var states = new Array();
+	proteinData.reduce(function(prev, curr, ind, arr){
+		prev.push(curr.UID);
+		//check for photoswitchable and photoactivatible proteins and add implicit off state
+		if (curr.type == "pc" || curr.type =="ps"){
+			prev.push(curr.UID + "_off");
+			}
+		return prev;
+	}, states);
+	
+	var links = {};
+	
+	
+	
+}
+
 
 function doalittledance(int) {
 	var s = ["QY","E","lambda_em","lambda_ex","brightness"];
