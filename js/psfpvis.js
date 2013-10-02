@@ -544,23 +544,44 @@ FPgroups.forEach( function(FPtype) {
 };
 
 function generate_transitions(name) {
-	//get all transitions for the protein with the given name
-	var proteinData = FPdata.filter(function(d) {return d.Name == name;});
-	//build a list of all states
-	var states = new Array();
-	proteinData.reduce(function(prev, curr, ind, arr){
-		prev.push(curr.UID);
-		//check for photoswitchable and photoactivatible proteins and add implicit off state
-		if (curr.type == "pc" || curr.type =="ps"){
-			prev.push(curr.UID + "_off");
-			}
-		return prev;
-	}, states);
+	var outputHTML = "";
+	//get all states for the protein with the given name
+	var proteinData = FPdata.filter(function(d) {return d.Name == name;})	
+	var statesToProcess = new Array();
+	var statesProcessed = new Array();
 	
-	var links = {};
-	
-	
-	
+	//get initial state for protein
+	var startState = proteinData.filter(function(d) {return d.initialState == 1;});
+	statesToProcess.push(startState[0].UID);
+	while (statesToProcess.length > 0){
+		//pull next state off queue
+		var nextState = statesToProcess.shift();
+		//check if we've processed it
+		if (!statesProcessed.some(function(d) {return d == nextState;})) {		
+			var transitions = linkdata.filter(function(d) {return d.state1 == nextState});
+			outputHTML = print_transitions(transitions, outputHTML);
+			//add destination states to list to process
+			transitions.forEach(function (d){statesToProcess.push(d.state2);});
+			//add current state to processed list
+			statesProcessed.push(nextState);
+		}
+	}
+	return outputHTML;
+}
+
+function print_transitions(transitions, outputHTML){
+	transitions.forEach(function(transit) {
+		//get name of state1
+		startname = FPdata.filter(function(d) {return d.UID == transit.state1});
+		startname = startname[0].state;
+		//get name of state2
+		endname = FPdata.filter(function(d) {return d.UID == transit.state2});
+		endname = endname[0].state;
+		outputHTML = outputHTML + startname + " &rarr; " + endname;
+		outputHTML = outputHTML + " (" + transit.lambda_sw + " nm)\n";
+		return outputHTML;
+	})
+	return outputHTML;
 }
 
 
