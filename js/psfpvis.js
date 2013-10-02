@@ -34,10 +34,11 @@ var tableStrings = {
 	"QY"		: "QY",
 	"brightness": "Brightness",
 	"pka" 		: "pKa",
-	"bleach" 	: "Bleaching (s)",
+	"bleach" 	: "t<sub>bleach</sub> (s)",
 	"mature" 	: "Maturation (min)",
 	"lifetime" 	: "Lifetime (ns)",
-	"RefNum"	: "Reference"
+	"transits"	: "Transitions",
+	"RefNum"	: "Ref."
 }
 
 //Protein classes for tables
@@ -528,13 +529,23 @@ FPgroups.forEach( function(FPtype) {
 								.attr("class", "col numeric")
 								.attr("rowspan", nStates)
 								.html("<a href=\"#ref" + proteinData[i][key] + "\">" + proteinData[i][key] + "</a>");
-							}
 						}
-						else{
-						row.append("td")
-							.attr("class", "col numeric")
-							.html(proteinData[i][key]);
+					}
+					else if (key == "transits"){
+						//add transitions table, in a rowspan
+						if (i==0){
+							row.append("td")
+								.attr("class", "col numeric")
+								.attr("rowspan", nStates)
+								.html(generate_transitions(currprotein));
 						}
+						}
+					else{
+					row.append("td")
+						.attr("class", "col numeric")
+						.html(proteinData[i][key]);
+					}
+
 
 				}
 			}		
@@ -578,7 +589,7 @@ function print_transitions(transitions, outputHTML){
 		endname = FPdata.filter(function(d) {return d.UID == transit.state2});
 		endname = endname[0].state;
 		outputHTML = outputHTML + startname + " &rarr; " + endname;
-		outputHTML = outputHTML + " (" + transit.lambda_sw + " nm)\n";
+		outputHTML = outputHTML + " (" + transit.lambda_sw + " nm)<br>\n";
 		return outputHTML;
 	})
 	return outputHTML;
