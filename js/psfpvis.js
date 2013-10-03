@@ -35,7 +35,7 @@ var tableStrings = {
 	"brightness": "Brightness",
 	"pka" 		: "pKa",
 	"bleach" 	: "t<sub>bleach</sub> (s)",
-	"mature" 	: "Maturation (min)",
+	"mature" 	: "t<sub>mature</sub> (min)",
 	"lifetime" 	: "Lifetime (ns)",
 	"transits"	: "Transitions",
 	"RefNum"	: "Ref."
@@ -589,7 +589,7 @@ function print_transitions(transitions, outputHTML){
 		endname = FPdata.filter(function(d) {return d.UID == transit.state2});
 		endname = endname[0].state;
 		outputHTML = outputHTML + startname + " &rarr; " + endname;
-		outputHTML = outputHTML + " (" + transit.lambda_sw + " nm)<br>\n";
+		outputHTML = outputHTML + ", " + transit.lambda_sw + " nm<br>\n";
 		return outputHTML;
 	})
 	return outputHTML;
