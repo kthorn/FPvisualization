@@ -3,6 +3,7 @@ var currentX = "lambda_ex"
 var currentY = "lambda_em"
 var symbolsize = 7; //radius of circle
 var bigsymbolsize = 11; //size to grow to on mouseover
+var mouseovertime = 150; //animation timing for mouseovers
 //global varable to set the ranges over which the data is filtered.  
 var filters = {
 	"lambda_ex" : [350,800,1],		// array values represent [min range, max range, step (for the range slider)]
@@ -352,10 +353,10 @@ function plot(xvar,yvar,data,links){
     		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
 		.on("mouseover", function(d) { 
-			d3.select(this).transition().duration(100).attr("r", bigsymbolsize);
+			d3.select(this).transition().duration(mouseovertime).attr("r", bigsymbolsize);
 			draw_tooltip(d, this);})
 		.on("mouseout", function() {
-			d3.select(this).transition().duration(200).attr("r", symbolsize)
+			d3.select(this).transition().duration(mouseovertime).attr("r", symbolsize)
 			//Hide the tooltip
 			d3.select("#tooltip").classed("hidden", true);			
 		})
@@ -386,14 +387,14 @@ function plot(xvar,yvar,data,links){
     		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
 		.on("mouseover", function(d) { 
-			d3.select(this).transition().duration(100)
+			d3.select(this).transition().duration(mouseovertime)
 				.attr("height", bigsymbolsize*2)
 				.attr("width", bigsymbolsize*2)
 				.attr("x", function (d) { return xScale (d[xvar]) - bigsymbolsize; })
 				.attr("y", function (d) { return yScale (d[yvar]) - bigsymbolsize; });
 			draw_tooltip(d, this);})
 		.on("mouseout", function() {
-			d3.select(this).transition().duration(200)
+			d3.select(this).transition().duration(mouseovertime)
 				.attr("height", symbolsize*2)
 				.attr("width", symbolsize*2)
 				.attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
