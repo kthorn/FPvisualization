@@ -2,6 +2,7 @@
 var currentX = "lambda_ex" 
 var currentY = "lambda_em"
 var symbolsize = 7; //radius of circle
+var bigsymbolsize = 11; //size to grow to on mouseover
 //global varable to set the ranges over which the data is filtered.  
 var filters = {
 	"lambda_ex" : [350,800,1],		// array values represent [min range, max range, step (for the range slider)]
@@ -350,9 +351,11 @@ function plot(xvar,yvar,data,links){
 		.on('click', function(e){
     		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
-		.on("mouseover", function(d) { draw_tooltip(d, this);})
+		.on("mouseover", function(d) { 
+			d3.select(this).transition().duration(100).attr("r", bigsymbolsize);
+			draw_tooltip(d, this);})
 		.on("mouseout", function() {
-			d3.select(this).transition().duration(200).attr("r",8)
+			d3.select(this).transition().duration(200).attr("r", symbolsize)
 			//Hide the tooltip
 			d3.select("#tooltip").classed("hidden", true);			
 		})
@@ -382,9 +385,19 @@ function plot(xvar,yvar,data,links){
 		.on('click', function(e){
     		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
-		.on("mouseover", function(d) { draw_tooltip(d, this);})
+		.on("mouseover", function(d) { 
+			d3.select(this).transition().duration(100)
+				.attr("height", bigsymbolsize*2)
+				.attr("width", bigsymbolsize*2)
+				.attr("x", function (d) { return xScale (d[xvar]) - bigsymbolsize; })
+				.attr("y", function (d) { return yScale (d[yvar]) - bigsymbolsize; });
+			draw_tooltip(d, this);})
 		.on("mouseout", function() {
-			d3.select(this).transition().duration(200).attr("r",8)
+			d3.select(this).transition().duration(200)
+				.attr("height", symbolsize*2)
+				.attr("width", symbolsize*2)
+				.attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
+				.attr("y", function (d) { return yScale (d[yvar]) - symbolsize; });
 			//Hide the tooltip
 			d3.select("#tooltip").classed("hidden", true);			
 		})
@@ -426,11 +439,10 @@ function plot(xvar,yvar,data,links){
 }
 
 function draw_tooltip(d, target) {
-			d3.select(target).transition().duration(100).attr("r",11)
 			d3.select(target).text("<a href='#'>hi</a>")
 			//Get target bar's x/y values, then augment for the tooltip
-			var xPosition = parseFloat(d3.select(target).attr("cx"))
-			var yPosition = parseFloat(d3.select(target).attr("cy"))
+			var xPosition = parseFloat(d3.select(target).attr("cx") || d3.select(target).attr("x"))
+			var yPosition = parseFloat(d3.select(target).attr("cy") || d3.select(target).attr("y"))
 			if (xPosition<width*2/3){
 				xPosition +=70;
 			} else {
