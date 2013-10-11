@@ -72,9 +72,12 @@ def formatBibliography(bibinfo):
         else:
             citation = bibinfo['firstAuthor'] + r" <i>et al.</i>"
         citation += " " + bibinfo['title'] + "."
-    
+		   
     if not bibinfo['journal'] == "":
         citation +=" <i>" + bibinfo['journal'] +"</i>"
+		
+	if not bibinfo['year'] == "":
+		citation +=" " +str(bibinfo['year']) + "."
         
     if not bibinfo['volume'] == "":
         citation += " <b>" + bibinfo['volume'] + "</b>"
@@ -82,10 +85,8 @@ def formatBibliography(bibinfo):
             citation += "(" + bibinfo['number'] +")"
     
     if not bibinfo['pages'] == "":
-        citation += ": " + bibinfo['pages']
-        
-    citation += ". "
-    
+        citation += ": " + bibinfo['pages'] + ". "
+            
     citation += "doi: <a target=\"_blank\" href=\"" + bibinfo['url'] +"\">" + bibinfo['doi'] + "</a>"
     return citation
     
