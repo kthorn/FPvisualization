@@ -39,3 +39,7 @@
 "dronpa_off","Dronpa","Off","ps",,,,,,"Monomer",,0,,,,"10.1126/science.1102506"
 "mgeosm_on","mGeos-M","On","ps",503,514,51600,0.85,43.9,"Monomer",4.7,1,,,,"10.1073/pnas.1113770109"
 "mgeosm_off","mGeos-M","Off","ps",,,,,,"Monomer",4.7,0,,,,"10.1073/pnas.1113770109"
+"dendra2_g","Dendra2","Green","pc",490,507,45000,0.5,22.5,"Monomer",6.6,1,,,,
+"dendra2_r","Dendra2","Red","pc",553,573,35000,0.55,19.3,"Monomer",6.9,0,,,,
+"rsegfp2_off","rsEGFP2","Off","ps",,,,,,"Monomer",,0,,,,"10.7554/eLife.00248 "
+"rsegfp2_on","rsEGFP2","On","ps",478,503,61300,0.3,18.4,"Monomer",5.8,1,,20,,"10.7554/eLife.00248 "

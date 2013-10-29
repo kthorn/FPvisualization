@@ -209,7 +209,11 @@ d3.csv("PSFPs_processed.csv", function (data) {
 		//caclulate Stokes shift
 		d.stokes = d.lambda_em - d.lambda_ex;
 		
-	})
+	});
+	
+	data.sort(function (a, b) {
+		return a.lambda_ex - b.lambda_ex;
+	});
 
 	FPdata = data;
 	
