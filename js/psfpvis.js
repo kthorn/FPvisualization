@@ -35,10 +35,10 @@ var tableStrings = {
 	"E"			: "EC",
 	"QY"		: "QY",
 	"brightness": "Brightness",
+	"Aggregation"	:	"Aggregation",
 	"pka" 		: "pKa",
 	"bleach" 	: "t<sub>bleach</sub> (s)",
 	"mature" 	: "t<sub>mature</sub> (min)",
-	"lifetime" 	: "Lifetime (ns)",
 	"transits"	: "Transitions",
 	"RefNum"	: "Ref."
 }
