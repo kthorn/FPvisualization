@@ -1,6 +1,8 @@
 //global variables to hold the current variables plotted on each axis
 var currentX = "lambda_ex" 
 var currentY = "lambda_em"
+var symbolsize = 8; //radius of circle
+var bigscale = 1.5; //how much to scale up on mouseover
 //global varable to set the ranges over which the data is filtered.  
 var filters = {
 	"lambda_ex" : [350,800,1],		// array values represent [min range, max range, step (for the range slider)]
@@ -183,6 +185,92 @@ var zoom = d3.behavior.zoom()
 	.y(yScale)
 	.scaleExtent([1, 10])
 	.on("zoom", draw_graph);
+	
+function plotcircle(sel){
+	circle = sel.append("circle")
+		.attr("class", "FP")
+		.attr("r", symbolsize)
+		.attr("stroke", "#000")
+		.attr("opacity", 0.7)
+		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.3)});
+		addactions(circle);
+		}
+		
+function plotsquare(sel){
+	square = sel.append("rect")
+		.attr("class", "FP")
+		.attr("width", symbolsize*2)
+		.attr("height", symbolsize*2)
+		.attr("stroke", "#000")
+		.attr("opacity", 0.7)
+		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.3)});
+		addactions(square);
+		}
+
+function addactions(sel){	
+		sel.on('click', function(e){
+			if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
+		})
+		.on("mouseover", function(d) {
+			d3.select(this).text("<a href='#'>hi</a>")
+			//Get this bar's x/y values, then augment for the tooltip
+			if (d3.select(this).attr("cx")){ //if circle
+				d3.select(this).transition().duration(100).attr("r",symbolsize*bigscale);
+				var xPosition = parseFloat(d3.select(this).attr("cx"))
+				var yPosition = parseFloat(d3.select(this).attr("cy"))
+			} else if (d3.select(this).attr("x")){ //if rectangle
+				d3.select(this).transition().duration(100)
+					.attr("width", symbolsize*2*bigscale)
+					.attr("height", symbolsize*2*bigscale);
+				var xPosition = parseFloat(d3.select(this).attr("x") )
+				var yPosition = parseFloat(d3.select(this).attr("y") )
+			}
+			if (xPosition<width*2/3){
+				xPosition +=70;
+			} else {
+				xPosition -=140;
+			}
+			if (yPosition>520){
+				yPosition =520;
+			}
+			//Update the tooltip position and value
+			d3.select("#tooltip")
+				.style("left", xPosition + "px")
+				.style("top", yPosition + "px")						
+				.select("#exvalue")
+				.text(d.lambda_ex)
+			d3.select("#tooltip")
+				.select("#emvalue")
+				.text(d.lambda_em);
+			d3.select("#tooltip")
+				.select("#ecvalue")
+				.text(d.E);
+			d3.select("#tooltip")
+				.select("#qyvalue")
+				.text(d.QY);
+			d3.select("#tooltip")
+				.select("h3")
+				.html(d.Name);
+			d3.select("#tooltip")
+				.select("#brightnessvalue")
+				.text(d.brightness);
+
+		//Show the tooltip
+		d3.select("#tooltip").classed("hidden", false);
+		})
+		
+		.on("mouseout", function() {
+			if (d3.select(this).attr("cx")){ //if circle
+				d3.select(this).transition().duration(200).attr("r",symbolsize)
+			} else if (d3.select(this).attr("x")){ //if circle
+				d3.select(this).transition().duration(200)
+					.attr("width", symbolsize*2)
+					.attr("height", symbolsize*2);
+			}
+			//Hide the tooltip
+			d3.select("#tooltip").classed("hidden", true);			
+		})
+		}
 
 svg.append("rect")
 	.attr("class", "pane")
@@ -224,6 +312,10 @@ function draw_graph(){
 	svg.selectAll("circle.FP")
 		.attr("cx", function (d) { return xScale (d[currentX]); })
 		.attr("cy", function (d) { return yScale (d[currentY]); })
+
+	svg.selectAll("rect.FP")
+	    .attr("x", function (d) { return xScale (d[currentX]) - symbolsize; })
+	    .attr("y", function (d) { return yScale (d[currentY]) - symbolsize; })
 }
 
 //i added this more flexible plotting function to be able to plot different variables on each axis.  It takes three optional parameters: the data array, and two axes variables.  
@@ -269,65 +361,21 @@ function plot(xvar,yvar,data){
 
 	// Join new data with old elements, if any.
 	var datagroup = svg.selectAll("g.FP").data(data, function (d){ return d.Name;});
-	datagroup.enter().append("g")
+	entergroup = datagroup.enter().append("g")
 		.attr("class", "FP")
-		.attr("clip-path", "url(#chart-area)") 
-		.append("circle")
-			.attr("class", "FP")
-			.attr("r", 8)
-			.attr("stroke", "#000")
-			.attr("opacity", 0.7)
-			.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)})
-			.on('click', function(e){
-				if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
-			})
-			.on("mouseover", function(d) {
-				d3.select(this).transition().duration(100).attr("r",11)
-				d3.select(this).text("<a href='#'>hi</a>")
-				//Get this bar's x/y values, then augment for the tooltip
-				var xPosition = parseFloat(d3.select(this).attr("cx"))
-				var yPosition = parseFloat(d3.select(this).attr("cy"))
-				if (xPosition<width*2/3){
-					xPosition +=70;
-				} else {
-					xPosition -=140;
-				}
-				if (yPosition>520){
-					yPosition =520;
-				}
-				//Update the tooltip position and value
-				d3.select("#tooltip")
-					.style("left", xPosition + "px")
-					.style("top", yPosition + "px")						
-					.select("#exvalue")
-					.text(d.lambda_ex)
-				d3.select("#tooltip")
-					.select("#emvalue")
-					.text(d.lambda_em);
-				d3.select("#tooltip")
-					.select("#ecvalue")
-					.text(d.E);
-				d3.select("#tooltip")
-					.select("#qyvalue")
-					.text(d.QY);
-				d3.select("#tooltip")
-					.select("h3")
-					.html(d.Name);
-				d3.select("#tooltip")
-					.select("#brightnessvalue")
-					.text(d.brightness);
-
-			//Show the tooltip
-			d3.select("#tooltip").classed("hidden", false);
-
-		})
-		.on("mouseout", function() {
-			d3.select(this).transition().duration(200).attr("r",8)
-			//Hide the tooltip
-			d3.select("#tooltip").classed("hidden", true);
-			
-		})
-		.call(zoom)		//so we can zoom while moused over circles as well
+		.attr("clip-path", "url(#chart-area)")
+		.call(zoom);		//so we can zoom while moused over elements
+	
+	entergroup.each(function(d, i) {
+		//determine type of protein and whether to plot a circle or a square
+		if (d["type"] =="i"){
+			//plot new circles
+			plotcircle(d3.select(this));
+		} else if (d["type"] =="e"){
+			// plot new squares
+			plotsquare(d3.select(this));
+		}
+	})
 	
 	// Remove old elements as needed.
 	datagroup.exit().remove();
@@ -335,10 +383,15 @@ function plot(xvar,yvar,data){
 	// move circles to their new positions (based on axes) with transition animation
 	datagroup.each(function(d, i) {
 		current = d3.select(this)
-		current.selectAll("circle")
+		current.selectAll("circle.FP")
 			.transition()
 			.attr("cx", function (d) { return xScale (d[xvar]); })
 			.attr("cy", function (d) { return yScale (d[yvar]); })
+			.duration(800); //change this number to speed up or slow down the animation
+		current.selectAll("rect.FP")
+			.transition()
+			.attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
+			.attr("y", function (d) { return yScale (d[yvar]) - symbolsize; })
 			.duration(800); //change this number to speed up or slow down the animation
 	})
 
