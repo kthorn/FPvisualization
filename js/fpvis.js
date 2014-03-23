@@ -81,7 +81,6 @@ $(function() {
 	  plot();
 	});
 
-
     $("#Xradio").buttonsetv();
     $("#Yradio").buttonsetv();
 
@@ -269,54 +268,54 @@ function plot(xvar,yvar,data){
 	svg.select(".y.label").text(strings[yvar])
 
 	// Join new data with old elements, if any.
-	var circle = svg.selectAll("circle.FP").data(data, function (d){ return d.Name;});
-
-	// Create new elements as needed.
-	circle.enter().append("circle")
-		.attr("clip-path", "url(#chart-area)") 
+	var datagroup = svg.selectAll("g.FP").data(data, function (d){ return d.Name;});
+	datagroup.enter().append("g")
 		.attr("class", "FP")
-		.attr("r", 8)
-		.attr("stroke", "#000")
-		.attr("opacity", 0.7)
-		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)})
-		.on('click', function(e){
-    		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
-		})
-		.on("mouseover", function(d) {
-			d3.select(this).transition().duration(100).attr("r",11)
-			d3.select(this).text("<a href='#'>hi</a>")
-			//Get this bar's x/y values, then augment for the tooltip
-			var xPosition = parseFloat(d3.select(this).attr("cx"))
-			var yPosition = parseFloat(d3.select(this).attr("cy"))
-			if (xPosition<width*2/3){
-				xPosition +=70;
-			} else {
-				xPosition -=140;
-			}
-			if (yPosition>520){
-				yPosition =520;
-			}
-			//Update the tooltip position and value
-			d3.select("#tooltip")
-				.style("left", xPosition + "px")
-				.style("top", yPosition + "px")						
-				.select("#exvalue")
-				.text(d.lambda_ex)
-			d3.select("#tooltip")
-				.select("#emvalue")
-				.text(d.lambda_em);
-			d3.select("#tooltip")
-				.select("#ecvalue")
-				.text(d.E);
-			d3.select("#tooltip")
-				.select("#qyvalue")
-				.text(d.QY);
-			d3.select("#tooltip")
-				.select("h3")
-				.html(d.Name);
-			d3.select("#tooltip")
-				.select("#brightnessvalue")
-				.text(d.brightness);
+		.attr("clip-path", "url(#chart-area)") 
+		.append("circle")
+			.attr("class", "FP")
+			.attr("r", 8)
+			.attr("stroke", "#000")
+			.attr("opacity", 0.7)
+			.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)})
+			.on('click', function(e){
+				if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
+			})
+			.on("mouseover", function(d) {
+				d3.select(this).transition().duration(100).attr("r",11)
+				d3.select(this).text("<a href='#'>hi</a>")
+				//Get this bar's x/y values, then augment for the tooltip
+				var xPosition = parseFloat(d3.select(this).attr("cx"))
+				var yPosition = parseFloat(d3.select(this).attr("cy"))
+				if (xPosition<width*2/3){
+					xPosition +=70;
+				} else {
+					xPosition -=140;
+				}
+				if (yPosition>520){
+					yPosition =520;
+				}
+				//Update the tooltip position and value
+				d3.select("#tooltip")
+					.style("left", xPosition + "px")
+					.style("top", yPosition + "px")						
+					.select("#exvalue")
+					.text(d.lambda_ex)
+				d3.select("#tooltip")
+					.select("#emvalue")
+					.text(d.lambda_em);
+				d3.select("#tooltip")
+					.select("#ecvalue")
+					.text(d.E);
+				d3.select("#tooltip")
+					.select("#qyvalue")
+					.text(d.QY);
+				d3.select("#tooltip")
+					.select("h3")
+					.html(d.Name);
+				d3.select("#tooltip")
+					.select("#brightnessvalue")
+					.text(d.brightness);
 
 			//Show the tooltip
 			d3.select("#tooltip").classed("hidden", false);
@@ -329,15 +328,19 @@ function plot(xvar,yvar,data){
 			
 		})
 		.call(zoom)		//so we can zoom while moused over circles as well
-
+	
 	// Remove old elements as needed.
-	circle.exit().remove();
+	datagroup.exit().remove();
 
 	// move circles to their new positions (based on axes) with transition animation
-	circle.transition()
-	    .attr("cx", function (d) { return xScale (d[xvar]); })
-	    .attr("cy", function (d) { return yScale (d[yvar]); })
-	    .duration(800); //change this number to speed up or slow down the animation
+	datagroup.each(function(d, i) {
+		current = d3.select(this)
+		current.selectAll("circle")
+			.transition()
+			.attr("cx", function (d) { return xScale (d[xvar]); })
+			.attr("cy", function (d) { return yScale (d[yvar]); })
+			.duration(800); //change this number to speed up or slow down the animation
+	})
 
 	// these two lines cause the transition animation on the axes... they are also cause chopiness in the user interface when the user slides the range sliders on the right side...  uncomment to see their effect.
 	svg.select(".x.axis.bottom").call(xAxis_bottom);
