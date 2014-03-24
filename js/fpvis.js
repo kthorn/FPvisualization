@@ -7,7 +7,7 @@ var bigscale = 1.5; //how much to scale up on mouseover
 var filters = {
 	"lambda_ex" : [350,800,1],		// array values represent [min range, max range, step (for the range slider)]
 	"lambda_em" : [350,800,1],
-	"E"			: [10000,200000,1000],
+	"E"			: [10000,170000,1000],
 	"QY"		: [0,1,0.01],
 	"brightness": [0,100,1]
 }
