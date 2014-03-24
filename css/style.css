@@ -13,6 +13,15 @@ body {
 	opacity: 0.7;
 }
 
+text.FP
+{
+	font-size: 12px;
+	font-weight: bold;
+	opacity: 1;
+	fill: #000000;
+	pointer-events: none;
+}
+
 .PSFP
 {
 	stroke-width: 1.5px;

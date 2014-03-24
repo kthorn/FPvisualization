@@ -47,8 +47,8 @@ var FPgroups = [
 		{"Name" : "Cyan", "ex_min" : 421, "ex_max" : 473, "em_min" : 0, "em_max" : 530, "color" : "#80FFFF"},
 		{"Name" : "Green", "ex_min" : 473, "ex_max" : 507, "em_min" : 480, "em_max" : 530, "color" : "#80FF80"},
 		{"Name" : "Yellow", "ex_min" : 507, "ex_max" : 531, "em_min" : 500, "em_max" : 1000, "color" : "#FFFF80"},
-		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 556, "em_min" : 530, "em_max" : 569, "color" : "#FFC080"},
-		{"Name" : "Red", "ex_min" : 556, "ex_max" : 600, "em_min" : 570, "em_max" : 620, "color" : "#FFA080"},
+		{"Name" : "Orange", "ex_min" : 531, "ex_max" : 555, "em_min" : 530, "em_max" : 569, "color" : "#FFC080"},
+		{"Name" : "Red", "ex_min" : 555, "ex_max" : 600, "em_min" : 570, "em_max" : 620, "color" : "#FFA080"},
 		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 631, "em_min" : 620, "em_max" : 1000, "color" : "#FF8080"},
 		{"Name" : "Near IR", "ex_min" : 631, "ex_max" : 800, "em_min" : 661, "em_max" : 1000, "color" : "#B09090"},
 		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530, "color" : "#8080FF"},
@@ -192,9 +192,9 @@ function plotcircle(sel){
 		.attr("r", symbolsize)
 		.attr("stroke", "#000")
 		.attr("opacity", 0.7)
-		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.3)});
+		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)});
 		addactions(circle);
-		}
+	}
 		
 function plotsquare(sel){
 	square = sel.append("rect")
@@ -203,16 +203,28 @@ function plotsquare(sel){
 		.attr("height", symbolsize*2)
 		.attr("stroke", "#000")
 		.attr("opacity", 0.7)
-		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.3)});
+		.style("fill", function (d) { return d3.hsl(hueScale (d.lambda_em), saturationScale (d.brightness), 0.5)});
 		addactions(square);
-		}
+	}
+	
+	function plottext(sel){
+	text = sel.append("text")
+		.attr("class", "FP")
+		.text(function (d) { 
+			if (d["agg"] == "d") { return "2"} 
+			else if (d["agg"] == "td") { return "t"} 
+			else if (d["agg"] == "t") { return "4"}
+			;} )
+		addactions(text);
+	}
+		
 
 function addactions(sel){	
 		sel.on('click', function(e){
 			if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
 		.on("mouseover", function(d) {
-			d3.select(this).text("<a href='#'>hi</a>")
+			//d3.select(this).text("<a href='#'>hi</a>")
 			//Get this bar's x/y values, then augment for the tooltip
 			if (d3.select(this).attr("cx")){ //if circle
 				d3.select(this).transition().duration(100).attr("r",symbolsize*bigscale);
@@ -316,6 +328,10 @@ function draw_graph(){
 	svg.selectAll("rect.FP")
 	    .attr("x", function (d) { return xScale (d[currentX]) - symbolsize; })
 	    .attr("y", function (d) { return yScale (d[currentY]) - symbolsize; })
+		
+	svg.selectAll("text.FP")
+	    .attr("x", function (d) { return xScale (d[currentX]) - symbolsize/2; })
+	    .attr("y", function (d) { return yScale (d[currentY]) + symbolsize/2; })
 }
 
 //i added this more flexible plotting function to be able to plot different variables on each axis.  It takes three optional parameters: the data array, and two axes variables.  
@@ -375,6 +391,8 @@ function plot(xvar,yvar,data){
 			// plot new squares
 			plotsquare(d3.select(this));
 		}
+		//add text to markers
+		plottext(d3.select(this));
 	})
 	
 	// Remove old elements as needed.
@@ -392,6 +410,11 @@ function plot(xvar,yvar,data){
 			.transition()
 			.attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
 			.attr("y", function (d) { return yScale (d[yvar]) - symbolsize; })
+			.duration(800); //change this number to speed up or slow down the animation
+		current.selectAll("text.FP")
+			.transition()
+			.attr("x", function (d) { return xScale (d[xvar]) - symbolsize/2; })
+			.attr("y", function (d) { return yScale (d[yvar]) + symbolsize/2; })
 			.duration(800); //change this number to speed up or slow down the animation
 	})
 
