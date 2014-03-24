@@ -71,7 +71,9 @@ def formatBibliography(bibinfo):
             citation = bibinfo['firstAuthor']
         else:
             citation = bibinfo['firstAuthor'] + r" <i>et al.</i>"
-        citation += " " + bibinfo['title'] + "."
+	
+	if not bibinfo['title'] == "" and not bibinfo['title'] == None:
+		citation += " " + bibinfo['title'] + "."
 		   
     if not bibinfo['journal'] == "":
         citation +=" <i>" + bibinfo['journal'] +"</i>"
@@ -102,7 +104,6 @@ csvFileOut = basename[0] + '_processed.csv'
 bibFileOut = basename[0] + '_bibliography.html'
 DOIindex = dict() #here is where we store the mapping of DOI the order of appearance
 maxRefNum = 1;
-
 with open(csvFileIn, 'rU') as csvIn:
     FPreader = csv.DictReader(csvIn)
     with open(csvFileOut, 'wb') as csvOut:
