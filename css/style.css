@@ -10,6 +10,7 @@ body {
 .FP, .PSFP
 {
 	shape-rendering: geometricPrecision;
+	text-rendering: optimizeLegibility;
 	opacity: 0.7;
 }
 

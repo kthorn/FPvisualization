@@ -214,17 +214,14 @@ function plotsquare(sel){
 			if (d["agg"] == "d") { return "2"} 
 			else if (d["agg"] == "td") { return "t"} 
 			else if (d["agg"] == "t") { return "4"}
-			;} )
-		addactions(text);
+		;} )
 	}
-		
 
 function addactions(sel){	
 		sel.on('click', function(e){
 			if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
 		.on("mouseover", function(d) {
-			//d3.select(this).text("<a href='#'>hi</a>")
 			//Get this bar's x/y values, then augment for the tooltip
 			if (d3.select(this).attr("cx")){ //if circle
 				d3.select(this).transition().duration(100).attr("r",symbolsize*bigscale);
@@ -232,6 +229,8 @@ function addactions(sel){
 				var yPosition = parseFloat(d3.select(this).attr("cy"))
 			} else if (d3.select(this).attr("x")){ //if rectangle
 				d3.select(this).transition().duration(100)
+					.attr("x", function (d) { return xScale (d[currentX]) - symbolsize*bigscale; })
+					.attr("y", function (d) { return yScale (d[currentY]) - symbolsize*bigscale; })
 					.attr("width", symbolsize*2*bigscale)
 					.attr("height", symbolsize*2*bigscale);
 				var xPosition = parseFloat(d3.select(this).attr("x") )
@@ -276,6 +275,8 @@ function addactions(sel){
 				d3.select(this).transition().duration(200).attr("r",symbolsize)
 			} else if (d3.select(this).attr("x")){ //if circle
 				d3.select(this).transition().duration(200)
+					.attr("x", function (d) { return xScale (d[currentX]) - symbolsize; })
+					.attr("y", function (d) { return yScale (d[currentY]) - symbolsize; })
 					.attr("width", symbolsize*2)
 					.attr("height", symbolsize*2);
 			}
