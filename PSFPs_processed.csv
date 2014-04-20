@@ -43,3 +43,5 @@ dendra2_g,Dendra2,Green,pc,490,507,45000,0.5,22.5,Monomer,6.6,1,,,,,
 dendra2_r,Dendra2,Red,pc,553,573,35000,0.55,19.3,Monomer,6.9,0,,,,,
 rsegfp2_off,rsEGFP2,Off,ps,,,,,,Monomer,,0,,,,10.7554/eLife.00248 ,19
 rsegfp2_on,rsEGFP2,On,ps,478,503,61300,0.3,18.4,Monomer,5.8,1,,20,,10.7554/eLife.00248 ,19
+pcdronpa2_g,pcDronpa2,Green,pc,504,515,100000,0.83,83,Tetramer,5.8,1,,,,10.1021/nn4060144,20
+pcdronpa2_r,pcDronpa2,Red,pc,569,583,105000,0.68,71.4,Tetramer,6.1,0,,,,10.1021/nn4060144,20
