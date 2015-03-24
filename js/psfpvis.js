@@ -1,10 +1,10 @@
 //global variables to hold the current variables plotted on each axis
-var currentX = "lambda_ex" 
+var currentX = "lambda_ex"
 var currentY = "lambda_em"
 var symbolsize = 7; //radius of circle
 var bigsymbolsize = 11; //size to grow to on mouseover
 var mouseovertime = 150; //animation timing for mouseovers
-//global varable to set the ranges over which the data is filtered.  
+//global varable to set the ranges over which the data is filtered.
 var filters = {
 	"lambda_ex" : [350,800,1],		// array values represent [min range, max range, step (for the range slider)]
 	"lambda_em" : [350,800,1],
@@ -53,7 +53,7 @@ var FPgroups = [
 //on page load, listen to slider events and respond by updating the filter ranges (and updating the ui)
 //this uses jQuery and jQuery UI which have been added to the head of the document.
 $(function() {
-	
+
 	//dynamically generate filter sliders based on "filters" object
 	$.each(filters, function(i,v){
 		var label = $("<label class='rangeSlider' for="+i+">"+strings[i]+"</label>").appendTo("#sliders");
@@ -113,11 +113,11 @@ var yScale = d3.scale.linear()
 var saturationScale = d3.scale.linear()
 			.range([0, 1])
 			.domain([0, 100]);
-			
+
 //This scale will set the hue.  We will use it for mapping emission wavelength.
 var hueScale = d3.scale.linear()
 			.range([300, 300, 240, 0, 0])
-			.domain([200, 405, 440, 650, 850]);				
+			.domain([200, 405, 440, 650, 850]);
 
 //X and Y axes
 var xAxis_bottom = d3.svg.axis().scale(xScale).tickSize(5).tickSubdivide(true);
@@ -133,12 +133,12 @@ var svg = d3.select("#graph").append("svg")
 	.attr("height", height + margin.top + margin.bottom)
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	
+
 //Add the axes
 svg.append("g")
 	.attr("class", "x axis bottom")
 	.attr("transform", "translate(0," + height + ")")
-	.call(xAxis_bottom);		
+	.call(xAxis_bottom);
 svg.append("g")
 	.attr("class", "y axis left")
 	.call(yAxis_left);
@@ -157,7 +157,7 @@ svg.append("text")
 	.attr("x", width/2 )
 	.attr("y", height-10)
 	.text("Excitation wavelength (nm)");
-	
+
 // Add a y-axis label.
 svg.append("text")
 	.attr("class", "y label")
@@ -166,18 +166,18 @@ svg.append("text")
 	.attr("y", margin.left-30)
 	.attr("transform", "rotate(-90)")
 	.text("Emission wavelength (nm)");
-	
+
 //Add a clipping path so that data points don't go outside of frame
 svg.append("clipPath")                  //Make a new clipPath
 	.attr("id", "chart-area")           //Assign an ID
-		.append("rect")                     
+		.append("rect")
 		.attr("width", width)
 		.attr("height", height);
-		
+
 // Create definition for arrowhead on lines
 defs = svg.append("defs"); //where marker definitions will go
-	
-//enable zooming	
+
+//enable zooming
 var zoom = d3.behavior.zoom()
 	.x(xScale)
 	.y(yScale)
@@ -190,10 +190,10 @@ svg.append("rect")
 	.attr("height", height)
 	.call(zoom);
 
-//a group to contain the clipping path that all out plots will go into.	
+//a group to contain the clipping path that all out plots will go into.
 plotarea = svg.append("g")
 	.attr("clip-path", "url(#chart-area)");
-	
+
 var FPdata = []; //Where the fluorescent protein data table will end up.
 var linkdata = []; //links between photoconvertible states
 
@@ -205,25 +205,25 @@ d3.csv("PSFPs_processed.csv", function (data) {
 		d.E = +d.E;
 		d.QY = +d.QY;
 		d.brightness = +d.brightness;
-		
+
 		//caclulate Stokes shift
 		d.stokes = d.lambda_em - d.lambda_ex;
-		
+
 	});
-	
+
 	data.sort(function (a, b) {
 		return a.lambda_ex - b.lambda_ex;
 	});
 
 	FPdata = data;
-	
+
 	//Only update max of saturation scale, so that gray corresponds to 0 brightness
 	//Use 80th percentile as max saturation so that not everything is muddy gray
-	saturationScale.domain([0, 
+	saturationScale.domain([0,
 		d3.quantile(FPdata.map(function(a) {return (+a.brightness)}).sort(function(a,b){return a-b}),0.8)
 	]);
-	
-	d3.csv("links.csv", function (links) {		
+
+	d3.csv("links.csv", function (links) {
 		links.forEach(function(link){
 			//populate link data with appropriate starting and ending coordinates
 			link.lambda = +link.lambda;
@@ -240,9 +240,9 @@ d3.csv("PSFPs_processed.csv", function (data) {
 			link.stokes = [startFP.stokes, endFP.stokes]
 			link.Name = startFP.Name;
 		});
-		
+
 		linkdata = links;
-		
+
 		//we have to generate separate markers for each line since markers can't inherit line color
 		//do this here because we only have to do it once
 		var markers = defs.selectAll("marker").data(links, function (d){ return d.state1;});
@@ -259,10 +259,10 @@ d3.csv("PSFPs_processed.csv", function (data) {
 			.attr("orient", "auto")
 		 .append("path")
 			.attr("d", "M0,-5L10,0L0,5");
-		
+
 		plot();
 		draw_table();
-	});		
+	});
 });
 
 function draw_graph(){
@@ -271,15 +271,15 @@ function draw_graph(){
 	svg.select(".y.axis.left").call(yAxis_left);
 	svg.select(".x.axis.top").call(xAxis_top);
 	svg.select(".y.axis.right").call(yAxis_right);
-	
+
 	svg.selectAll("circle.PSFP")
 		.attr("cx", function (d) { return xScale (d[currentX]); })
 		.attr("cy", function (d) { return yScale (d[currentY]); });
-		
+
 	svg.selectAll("rect.PSFP")
 		.attr("x", function (d) { return xScale (d[currentX]) - symbolsize; })
 		.attr("y", function (d) { return yScale (d[currentY]) -symbolsize; });
-		
+
 	svg.selectAll("line.PSFP")
 		.attr("x1", function (d) { return xScale (d[currentX][0]); })
 		.attr("x2", function (d) { return xScale (d[currentX][1]); })
@@ -287,7 +287,7 @@ function draw_graph(){
 		.attr("y2", function (d) { return yScale (d[currentY][1]); });
 }
 
-//i added this more flexible plotting function to be able to plot different variables on each axis.  It takes three optional parameters: the data array, and two axes variables.  
+//i added this more flexible plotting function to be able to plot different variables on each axis.  It takes three optional parameters: the data array, and two axes variables.
 function plot(xvar,yvar,data,links){
 	//set default values... if plot() is called without arguments, these default values will be used.
 	xvar = xvar || currentX;
@@ -297,7 +297,7 @@ function plot(xvar,yvar,data,links){
 
 	//filter the data according to the user settings for EC, QY, and brightness range
 	//we want to keep proteins where any state satisfies the criteria and only remove proteins where all states fail
-	
+
 	var goodFPs = [];
 	for (var i=0; i < data.length; i++){
 		//must pass filtercheck, be non-empty, and not previously recorded.
@@ -309,7 +309,7 @@ function plot(xvar,yvar,data,links){
 	}
 
 	// helper function to iterate through all of the data filters (without having to type them all out)
-	function filtercheck(data){		
+	function filtercheck(data){
 		for (f in filters){
 			v = filters[f];
 			if( data[f] < v[0] || data[f] > v[1] ) {return false;}
@@ -318,7 +318,7 @@ function plot(xvar,yvar,data,links){
 	}
 	data = data.filter(function(d) { return goodFPs.indexOf(d.Name) > -1; });
 	links = links.filter(function(d) { return goodFPs.indexOf(d.Name) > -1; });
-	
+
 	//additionally remove off states from data; we don't need to show them. These are found by looking for lambda_ex = 0
 	data = data.filter(function(d) { return d.lambda_ex > 0; });
 
@@ -340,7 +340,7 @@ function plot(xvar,yvar,data,links){
 	//relabel X and Y axes
 	svg.select(".x.label").text(strings[xvar])
 	svg.select(".y.label").text(strings[yvar])
-	
+
 	//filter out just photoactivatible proteins, plot them as circles
 	PAdata = data.filter(function(d) {return d.type == "pa" || d.type =="ps"; });
 	// Join new data with old elements, if any.
@@ -356,13 +356,13 @@ function plot(xvar,yvar,data,links){
 		.on('click', function(e){
     		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
-		.on("mouseover", function(d) { 
+		.on("mouseover", function(d) {
 			d3.select(this).transition().duration(mouseovertime).attr("r", bigsymbolsize);
 			draw_tooltip(d, this);})
 		.on("mouseout", function() {
 			d3.select(this).transition().duration(mouseovertime).attr("r", symbolsize)
 			//Hide the tooltip
-			d3.select("#tooltip").classed("hidden", true);			
+			d3.select("#tooltip").classed("hidden", true);
 		})
 		.call(zoom)		//so we can zoom while moused over circles as well
 
@@ -374,7 +374,7 @@ function plot(xvar,yvar,data,links){
 	    .attr("cx", function (d) { return xScale (d[xvar]); })
 	    .attr("cy", function (d) { return yScale (d[yvar]); })
 	    .duration(800); //change this number to speed up or slow down the animation
-		
+
 	//filter out just photoconvertible proteins, plot them as squares
 	PCdata = data.filter(function(d) {return d.type == "pc"; });
 	// Join new data with old elements, if any.
@@ -390,21 +390,22 @@ function plot(xvar,yvar,data,links){
 		.on('click', function(e){
     		if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
 		})
-		.on("mouseover", function(d) { 
+		.on("mouseover", function(d) {
 			d3.select(this).transition().duration(mouseovertime)
 				.attr("height", bigsymbolsize*2)
-				.attr("width", bigsymbolsize*2)
-				.attr("x", function (d) { return xScale (d[xvar]) - bigsymbolsize; })
-				.attr("y", function (d) { return yScale (d[yvar]) - bigsymbolsize; });
+				.attr("width", bigsymbolsize*2);
+                // not sure what these lines are supposed to do...
+				//.attr("x", function (d) { return xScale (d[xvar]) - bigsymbolsize; })
+				//.attr("y", function (d) { return yScale (d[yvar]) - bigsymbolsize; });
 			draw_tooltip(d, this);})
 		.on("mouseout", function() {
 			d3.select(this).transition().duration(mouseovertime)
 				.attr("height", symbolsize*2)
-				.attr("width", symbolsize*2)
-				.attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
-				.attr("y", function (d) { return yScale (d[yvar]) - symbolsize; });
+				.attr("width", symbolsize*2);
+				//.attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
+				//.attr("y", function (d) { return yScale (d[yvar]) - symbolsize; });
 			//Hide the tooltip
-			d3.select("#tooltip").classed("hidden", true);			
+			d3.select("#tooltip").classed("hidden", true);
 		})
 		.call(zoom)		//so we can zoom while moused over circles as well
 
@@ -416,21 +417,21 @@ function plot(xvar,yvar,data,links){
 	    .attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
 	    .attr("y", function (d) { return yScale (d[yvar]) - symbolsize; })
 	    .duration(800); //change this number to speed up or slow down the animation
-		
+
 	//Add links for photoconvertible proteins
 	//remove links that go to proteins in the off state (those with lambda_ex = 0);
-	
+
 	links = links.filter(function(d) { return !d.lambda_ex.some( function(w) { return w == 0}) });
-	
+
 	var line = plotarea.selectAll("line.PSFP").data(links, function (d){ return d.state1;});
 	line.enter().append("line")
 		.attr("class", "PSFP")
 		.attr("stroke", function (d) { return d3.hsl(hueScale (d.lambda_sw), 1, 0.5)})
 		.attr("marker-end", function (d){ return "url(#arrowhead" + d.state1 +")";})
 		.call(zoom);
-		
+
 	line.exit().remove();
-		
+
 	line.transition()
 		.attr("x1", function (d) { return xScale (d[currentX][0]); })
 		.attr("x2", function (d) { return xScale (d[currentX][1]); })
@@ -459,7 +460,7 @@ function draw_tooltip(d, target) {
 			//Update the tooltip position and value
 			d3.select("#tooltip")
 				.style("left", xPosition + "px")
-				.style("top", yPosition + "px")						
+				.style("top", yPosition + "px")
 				.select("#exvalue")
 				.text(d.lambda_ex)
 			d3.select("#tooltip")
@@ -502,20 +503,20 @@ FPgroups.forEach( function(FPtype) {
 	//filter table data
 	//remove proteins with lambda_ex = 0 (off states)
 	tdata = FPdata.filter(function(d) {return d.lambda_ex > 0;});
-	
-	tdata = tdata.filter(testfilt);			
+
+	tdata = tdata.filter(testfilt);
 	table.append("tr")
 		.attr("class", "header")
 		.selectAll("th")
 		.data(columns)
 	.enter().append("th")
 		.html(function(d,i) { return tableStrings[columns[i]]; })
-		.attr("class", function(d,i) { return (d == "Name") ? "col head protein" : "col head numeric"; }); // conditional here to limit the use of unneccesary global variables 
-		
+		.attr("class", function(d,i) { return (d == "Name") ? "col head protein" : "col head numeric"; }); // conditional here to limit the use of unneccesary global variables
+
 	//populate the table
 	//Can't use d3's data binding because we want to group different states of
 	//the same molecule as these in different rows of the data table.
-	
+
 	//Get list of all unique proteins from dataset
 	var FPnames = d3.set(tdata.map(function (d) {return d.Name;}));
 	FPnames.forEach( function(currprotein) {
@@ -525,7 +526,7 @@ FPgroups.forEach( function(FPtype) {
 		for (var i=0; i < nStates; i++){
 			//Add row
 			var row = table.append("tr").attr("class", "data");
-			
+
 			if (i == 0){
 			//First row, add protein name with rowspan
 			row.append("td")
@@ -535,7 +536,7 @@ FPgroups.forEach( function(FPtype) {
 			}
 			//loop over remaining data columns
 			for (var key in tableStrings) {
-				if (tableStrings.hasOwnProperty(key) && key != "Name") {		
+				if (tableStrings.hasOwnProperty(key) && key != "Name") {
 					//format text to print in table cell
 					var text = "";
 					if (key == "RefNum"){
@@ -565,7 +566,7 @@ FPgroups.forEach( function(FPtype) {
 
 
 				}
-			}		
+			}
 		}
 	});
 });
@@ -574,10 +575,10 @@ FPgroups.forEach( function(FPtype) {
 function generate_transitions(name) {
 	var outputHTML = "";
 	//get all states for the protein with the given name
-	var proteinData = FPdata.filter(function(d) {return d.Name == name;})	
+	var proteinData = FPdata.filter(function(d) {return d.Name == name;})
 	var statesToProcess = new Array();
 	var statesProcessed = new Array();
-	
+
 	//get initial state for protein
 	var startState = proteinData.filter(function(d) {return d.initialState == 1;});
 	statesToProcess.push(startState[0].UID);
@@ -585,7 +586,7 @@ function generate_transitions(name) {
 		//pull next state off queue
 		var nextState = statesToProcess.shift();
 		//check if we've processed it
-		if (!statesProcessed.some(function(d) {return d == nextState;})) {		
+		if (!statesProcessed.some(function(d) {return d == nextState;})) {
 			var transitions = linkdata.filter(function(d) {return d.state1 == nextState});
 			outputHTML = print_transitions(transitions, outputHTML);
 			//add destination states to list to process
@@ -619,7 +620,7 @@ function doalittledance(int) {
 	  var x = s[Math.floor(Math.random() * s.length)];
 	  do{
 	    var y = s[Math.floor(Math.random() * s.length)];
-	  }	while (x == y);	
+	  }	while (x == y);
 	  plot(x,y);
 	}, int);
 
@@ -637,7 +638,7 @@ $.fn.buttonsetv = function() {
   mw = 0; // max witdh
   $('label', this).each(function(index){
      w = $(this).width();
-     if (w > mw) mw = w; 
+     if (w > mw) mw = w;
   })
   $('label', this).each(function(index){
     $(this).width(mw);
