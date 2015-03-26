@@ -394,7 +394,8 @@ function plot(xvar,yvar,data,links){
 			d3.select(this).transition().duration(mouseovertime)
 				.attr("height", bigsymbolsize*2)
 				.attr("width", bigsymbolsize*2);
-                // not sure what these lines are supposed to do...
+                // These lines are supposed to recenter squares so that they grow symmetrically around their center but 
+				// they currently don't work properly; it looks like xvar and yvar are not set properly when changing axes
 				//.attr("x", function (d) { return xScale (d[xvar]) - bigsymbolsize; })
 				//.attr("y", function (d) { return yScale (d[yvar]) - bigsymbolsize; });
 			draw_tooltip(d, this);})
