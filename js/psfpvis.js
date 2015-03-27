@@ -380,6 +380,7 @@ function plot(xvar,yvar,data,links){
 	// Join new data with old elements, if any.
 	var square = plotarea.selectAll("rect.PSFP").data(PCdata, function (d){ return d.UID;});
 
+
 	// Create new elements as needed.
 	square.enter().append("rect")
 		.attr("class", "PSFP")
@@ -393,18 +394,32 @@ function plot(xvar,yvar,data,links){
 		.on("mouseover", function(d) {
 			d3.select(this).transition().duration(mouseovertime)
 				.attr("height", bigsymbolsize*2)
-				.attr("width", bigsymbolsize*2);
-                // These lines are supposed to recenter squares so that they grow symmetrically around their center but 
+				.attr("width", bigsymbolsize*2)
+                // These lines are supposed to recenter squares so that they grow symmetrically around their center but
 				// they currently don't work properly; it looks like xvar and yvar are not set properly when changing axes
-				//.attr("x", function (d) { return xScale (d[xvar]) - bigsymbolsize; })
-				//.attr("y", function (d) { return yScale (d[yvar]) - bigsymbolsize; });
+
+                // hmmm... xvar and yvar appear to be getting set properly upon changing axis
+                // confirm with alert(xvar)
+                // however, when a square enters the DOM in this .append() function it seems to "stick"
+                // with whatever the current xvar/yvar is at the moment and doesn't change it
+                // later when the axis are changed.   mousing over exposes this outdated databind...
+                // and also explains why it works fine on whatever axis were set when the given square
+                // entered the DOM.
+
+                // changing xvar/yvar to currentX/currentY fixes the problem but it's worth leaving comments
+                // here in case it breaks something later.
+                // it's possible that creating the plot() function here with optional xvar and yvar arguments
+                // was a bad idea, it might have been better to just use "global" currentX/currentY for everything.
+
+				.attr("x", function (d) { return xScale (d[currentX]) - bigsymbolsize; })
+				.attr("y", function (d) { return yScale (d[currentY]) - bigsymbolsize; });
 			draw_tooltip(d, this);})
 		.on("mouseout", function() {
 			d3.select(this).transition().duration(mouseovertime)
 				.attr("height", symbolsize*2)
-				.attr("width", symbolsize*2);
-				//.attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
-				//.attr("y", function (d) { return yScale (d[yvar]) - symbolsize; });
+				.attr("width", symbolsize*2)
+				.attr("x", function (d) { return xScale (d[currentX]) - symbolsize; })
+				.attr("y", function (d) { return yScale (d[currentY]) - symbolsize; });
 			//Hide the tooltip
 			d3.select("#tooltip").classed("hidden", true);
 		})
@@ -415,8 +430,8 @@ function plot(xvar,yvar,data,links){
 
 	// move squares to their new positions (based on axes) with transition animation
 	square.transition()
-	    .attr("x", function (d) { return xScale (d[xvar]) - symbolsize; })
-	    .attr("y", function (d) { return yScale (d[yvar]) - symbolsize; })
+	    .attr("x", function (d) { return xScale (d[currentX]) - symbolsize; })
+	    .attr("y", function (d) { return yScale (d[currentY]) - symbolsize; })
 	    .duration(800); //change this number to speed up or slow down the animation
 
 	//Add links for photoconvertible proteins
