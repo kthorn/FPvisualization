@@ -52,7 +52,7 @@ var FPgroups = [
 		{"Name" : "Far Red", "ex_min" : 585, "ex_max" : 631, "em_min" : 620, "em_max" : 1000, "color" : "#FF8080"},
 		{"Name" : "Near IR", "ex_min" : 631, "ex_max" : 800, "em_min" : 661, "em_max" : 1000, "color" : "#B09090"},
 		{"Name" : "Sapphire-type", "ex_min" : 380, "ex_max" : 420, "em_min" : 480, "em_max" : 530, "color" : "#8080FF"},
-		{"Name" : "Long Stokes Shift", "ex_min" : 430, "ex_max" : 500, "em_min" : 560, "em_max" : 650, "color" : "#80A0FF"}
+		{"Name" : "Long Stokes Shift", "ex_min" : 350, "ex_max" : 500, "em_min" : 560, "em_max" : 650, "color" : "#80A0FF"}
 ]
 
 //on page load, listen to slider events and respond by updating the filter ranges (and updating the ui)
