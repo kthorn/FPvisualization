@@ -218,10 +218,10 @@ function plotsquare(sel){
 	}
 
 function addactions(sel){	
-		sel.on('click', function(e){
-			if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
-		})
-		.on("mouseover", function(d) {
+//		sel.on('click', function(e){
+//			if(e.DOI){window.location = "http://dx.doi.org/" + e.DOI;}
+//		})
+		sel.on("mouseover", function(d) {
 			//Get this bar's x/y values, then augment for the tooltip
 			if (d3.select(this).attr("cx")){ //if circle
 				d3.select(this).transition().duration(100).attr("r",symbolsize*bigscale);
