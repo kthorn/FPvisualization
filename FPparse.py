@@ -112,15 +112,15 @@ with open(csvFileIn, 'rU') as csvIn:
         csvwrite = csv.DictWriter(csvOut, outHeaders)
         csvwrite.writeheader()
         for datarow in FPreader:
-            if not datarow['DOI'] in DOIindex:
-                if not datarow['DOI'] == "": #some entries don't have DOIs
-                    DOIindex[datarow['DOI']] = maxRefNum
-                    maxRefNum += 1
-            if not datarow['DOI'] == "": 
-                datarow['RefNum'] = DOIindex[datarow['DOI']]
-            else: 
-                datarow['RefNum'] = ""
-            csvwrite.writerow(datarow)
+			datarow['RefNum'] = ""
+			if not datarow['DOI'] == "": #some entries don't have DOIs
+				DOIlist = datarow['DOI'].split()
+				for DOI in DOIlist:
+					if not DOI in DOIindex:
+						DOIindex[DOI] = maxRefNum
+						maxRefNum += 1
+					datarow['RefNum'] = datarow['RefNum'] + str(DOIindex[DOI]) + " "
+			csvwrite.writerow(datarow)
 
 #Now generate bibliography from DOIindex
 indexDOI = dict()
